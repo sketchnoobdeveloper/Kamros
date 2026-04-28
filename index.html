@@ -3,512 +3,429 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>কামরস লাইব্রেরি ✦ প্রিমিয়াম ইবুক</title>
-<meta name="description" content="দাম্পত্য জীবন ও স্বাস্থ্য বিষয়ক প্রিমিয়াম বাংলা ইবুক — কামরস লাইব্রেরি">
+<title>কামরস লাইব্রেরি — প্রিমিয়াম ইবুক</title>
+<meta name="description" content="দাম্পত্য জীবন ও স্বাস্থ্য বিষয়ক প্রিমিয়াম বাংলা ইবুক">
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Hind+Siliguri:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ===== VARIABLES ===== */
-:root {
-  --bg: #0a0a12;
-  --bg2: #10101c;
-  --card: #14141f;
-  --card2: #1c1c2a;
-  --modal-bg: #0e0e1a;
-  --gold: #c9a84c;
-  --gold-light: #dfc06a;
-  --gold-dark: #9a7a2e;
-  --rose: #d4788a;
-  --rose-light: #e8a0af;
-  --text: #ece8e0;
-  --text-2: #a0998e;
-  --text-3: #5c5650;
-  --border: rgba(201,168,76,0.18);
-  --border2: rgba(201,168,76,0.35);
-  --ok: #52b07a;
-  --err: #e05252;
-  --warn: #e0a052;
-  --r: 12px;
-  --r2: 8px;
-  --sh: 0 8px 32px rgba(0,0,0,0.6);
-  --sh2: 0 4px 24px rgba(201,168,76,0.18);
-  --tr: all 0.28s ease;
+/* ════════════════════════════════════
+   ভেরিয়েবল
+════════════════════════════════════ */
+:root{
+  --bg:#090912;--bg2:#0f0f1c;--c1:#16162a;--c2:#1e1e32;
+  --gold:#c9a84c;--gold2:#e2c068;--gold3:#8a6e2a;
+  --rose:#d4788a;--rose2:#f0a0b0;
+  --blue:#4a8cff;--ok:#52b07a;--err:#e05252;--warn:#e0a052;
+  --t1:#ece8e0;--t2:#a09890;--t3:#5c5650;
+  --bd:rgba(201,168,76,.16);--bd2:rgba(201,168,76,.38);
+  --sh:0 8px 32px rgba(0,0,0,.65);--glow:0 0 24px rgba(201,168,76,.22);
+  --r:14px;--r2:9px;--r3:6px;--tr:.26s ease;
 }
-[data-theme="light"] {
-  --bg:#f4efe6; --bg2:#ede8df; --card:#fff; --card2:#f8f4ed; --modal-bg:#fff;
-  --text:#1a1614; --text-2:#6a6058; --text-3:#aaa098;
-  --border:rgba(154,122,46,0.2); --border2:rgba(154,122,46,0.4);
-  --sh:0 8px 32px rgba(0,0,0,0.1);
+[data-theme=light]{
+  --bg:#f2ede4;--bg2:#ece7dd;--c1:#fff;--c2:#f7f2ea;
+  --t1:#1a1614;--t2:#6a5e58;--t3:#a09890;
+  --bd:rgba(154,122,46,.18);--bd2:rgba(154,122,46,.4);--sh:0 8px 32px rgba(0,0,0,.1);
 }
-
-/* ===== RESET ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--gold)}
-h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif}
+body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gold3);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+.serif{font-family:'Cormorant Garamond',serif}
 img{display:block;max-width:100%}
+button{cursor:pointer;font-family:'Hind Siliguri',sans-serif}
 a{text-decoration:none;color:inherit}
-button{cursor:pointer}
 
-/* ===== LAYOUT ===== */
-.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
-.page{display:none;min-height:calc(100vh - 68px)}
-.page.active{display:block;animation:fadeUp .35s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+/* ════════ ANIMATIONS ════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes glow{0%,100%{box-shadow:0 0 12px rgba(201,168,76,0.2)}50%{box-shadow:0 0 28px rgba(201,168,76,0.45)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-@keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
-@keyframes slideIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.3)}50%{box-shadow:0 0 0 8px rgba(201,168,76,0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
 
-/* ===== AGE GATE ===== */
-#age-gate{
-  position:fixed;inset:0;z-index:9999;
-  display:flex;align-items:center;justify-content:center;padding:20px;
-  background:linear-gradient(135deg,#06060e 0%,#0f0a18 50%,#06060e 100%);
-}
-.age-box{
-  max-width:460px;width:100%;text-align:center;
-  animation:scaleIn .5s cubic-bezier(.34,1.56,.64,1);
-}
-.age-icon{font-size:3.5rem;margin-bottom:16px;animation:float 3s ease-in-out infinite;display:block}
-.age-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,2.8rem);font-style:italic;color:var(--gold);margin-bottom:6px}
-.age-sub{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--rose-light);margin-bottom:24px}
-.age-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 24px}
-.age-text{
-  color:var(--text-2);line-height:1.75;font-size:.92rem;margin-bottom:28px;
-  padding:20px 24px;
-  background:rgba(201,168,76,0.06);
-  border:1px solid var(--border);border-radius:var(--r);
-}
-.age-text strong{color:var(--gold)}
-.age-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
-.age-note{font-size:.72rem;color:var(--text-3);line-height:1.6;max-width:340px;margin:0 auto}
+/* ════════ LAYOUT ════════ */
+.w{max-width:1200px;margin:0 auto;padding:0 18px}
+.page{display:none;min-height:calc(100vh - 68px)}
+.page.on{display:block;animation:fadeUp .32s ease}
+.spin-el{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;vertical-align:middle}
+.skel{background:linear-gradient(90deg,var(--c1) 25%,var(--c2) 50%,var(--c1) 75%);background-size:200% 100%;animation:skel 1.3s infinite;border-radius:var(--r2)}
+.empty-st{text-align:center;padding:52px 20px;color:var(--t3)}
+.empty-st .ei{font-size:3rem;margin-bottom:12px;opacity:.4;display:block}
+.empty-st .et{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--t2);margin-bottom:6px}
+.empty-st .ed{font-size:.84rem}
+.divider-line{height:1px;background:var(--bd);margin:20px 0}
 
-/* ===== HEADER ===== */
-.header{
-  position:sticky;top:0;z-index:100;height:68px;
-  background:rgba(10,10,18,0.95);
-  border-bottom:1px solid var(--border);
-  backdrop-filter:blur(16px);
-  transition:background .3s;
-}
-[data-theme="light"] .header{background:rgba(244,239,230,0.95)}
-.nav{
-  max-width:1200px;margin:0 auto;padding:0 20px;
-  height:68px;display:flex;align-items:center;justify-content:space-between;gap:12px;
-}
-.logo{
-  display:flex;align-items:center;gap:10px;
-  font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;
-  color:var(--gold);letter-spacing:.04em;flex-shrink:0;
-}
-.logo-icon{font-size:1.4rem}
-.logo-sub{font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);font-family:'Hind Siliguri',sans-serif;font-weight:400;display:block;margin-top:1px}
-.logo:hover{color:var(--gold-light)}
+/* ════════ AGE GATE ════════ */
+#age-gate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 50% 30%,#0e0a1a 0%,#050508 100%)}
+.ag-box{max-width:460px;width:100%;text-align:center;animation:scaleIn .5s cubic-bezier(.34,1.56,.64,1)}
+.ag-icon{font-size:3.5rem;display:block;margin-bottom:14px;animation:float 3s ease-in-out infinite}
+.ag-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,5vw,2.8rem);font-style:italic;color:var(--gold);margin-bottom:5px}
+.ag-sub{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--rose2);margin-bottom:22px}
+.ag-line{width:55px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 22px}
+.ag-text{color:var(--t2);line-height:1.75;font-size:.9rem;margin-bottom:26px;padding:18px 22px;background:rgba(201,168,76,.06);border:1px solid var(--bd);border-radius:var(--r)}
+.ag-text strong{color:var(--gold)}
+.ag-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.ag-note{font-size:.7rem;color:var(--t3);line-height:1.6;max-width:340px;margin:0 auto}
+
+/* ════════ HEADER ════════ */
+.hdr{position:sticky;top:0;z-index:100;height:68px;background:rgba(9,9,18,.94);border-bottom:1px solid var(--bd);backdrop-filter:blur(16px);transition:background .3s}
+[data-theme=light] .hdr{background:rgba(242,237,228,.95)}
+.nav{max-width:1200px;margin:0 auto;padding:0 18px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;align-items:center;gap:9px;font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--gold);letter-spacing:.04em;flex-shrink:0;transition:var(--tr)}
+.logo-icon{font-size:1.35rem}
+.logo-sub{font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);font-family:'Hind Siliguri',sans-serif;font-weight:400;display:block;margin-top:1px}
+.logo:hover{color:var(--gold2)}
 .nav-links{display:flex;align-items:center;gap:2px;list-style:none}
-.nav-links a,.nav-links button{
-  font-family:'Hind Siliguri',sans-serif;font-size:.86rem;font-weight:500;
-  color:var(--text-2);background:none;border:none;padding:7px 12px;
-  border-radius:var(--r2);transition:var(--tr);white-space:nowrap;
-}
-.nav-links a:hover,.nav-links button:hover{color:var(--gold);background:rgba(201,168,76,0.08)}
-.badge18{
-  font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  background:rgba(212,120,138,0.15);color:var(--rose-light);
-  border:1px solid rgba(212,120,138,0.3);padding:3px 9px;border-radius:20px;
-}
-.nav-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.icon-btn{
-  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
-  background:none;border:1px solid var(--border);border-radius:var(--r2);
-  color:var(--text-2);font-size:.95rem;transition:var(--tr);
-}
-.icon-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.08)}
-.hamburger{display:none;flex-direction:column;gap:4px;padding:8px;background:none;border:none}
-.hamburger span{width:20px;height:2px;background:var(--text-2);border-radius:2px;transition:var(--tr);display:block}
-.mob-nav{
-  display:none;position:fixed;top:68px;left:0;right:0;z-index:99;
-  background:var(--card2);border-bottom:1px solid var(--border);
-  padding:12px;flex-direction:column;gap:3px;animation:slideIn .2s ease;
-}
-.mob-nav.open{display:flex}
-.mob-nav a,.mob-nav button{
-  font-family:'Hind Siliguri',sans-serif;font-size:.92rem;color:var(--text-2);
-  padding:11px 14px;border-radius:var(--r2);background:none;border:none;text-align:left;transition:var(--tr);
-}
-.mob-nav a:hover,.mob-nav button:hover{color:var(--gold);background:rgba(201,168,76,0.08)}
+.nav-links a,.nav-links button{font-size:.84rem;font-weight:500;color:var(--t2);background:none;border:none;padding:7px 11px;border-radius:var(--r3);transition:var(--tr);white-space:nowrap}
+.nav-links a:hover,.nav-links button:hover{color:var(--gold);background:rgba(201,168,76,.08)}
+.b18{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(212,120,138,.14);color:var(--rose2);border:1px solid rgba(212,120,138,.28);padding:3px 9px;border-radius:18px}
+.nav-act{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.ico-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:none;border:1px solid var(--bd);border-radius:var(--r3);color:var(--t2);font-size:.92rem;transition:var(--tr)}
+.ico-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.08)}
+.ham{display:none;flex-direction:column;gap:4px;padding:7px;background:none;border:none}
+.ham span{width:20px;height:2px;background:var(--t2);border-radius:2px;display:block;transition:var(--tr)}
+.mob-nav{display:none;position:fixed;top:68px;left:0;right:0;z-index:99;background:var(--c2);border-bottom:1px solid var(--bd);padding:10px;flex-direction:column;gap:3px;animation:slideDown .2s ease}
+.mob-nav.on{display:flex}
+.mob-nav a,.mob-nav button{font-size:.9rem;color:var(--t2);padding:10px 13px;border-radius:var(--r3);background:none;border:none;text-align:left;transition:var(--tr)}
+.mob-nav a:hover,.mob-nav button:hover{color:var(--gold);background:rgba(201,168,76,.08)}
 
-/* ===== BUTTONS ===== */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  font-family:'Hind Siliguri',sans-serif;font-size:.88rem;font-weight:600;
-  padding:9px 20px;border-radius:var(--r2);border:none;transition:var(--tr);white-space:nowrap;
-}
-.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#080810;box-shadow:0 3px 14px rgba(201,168,76,0.28)}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,168,76,0.45);background:linear-gradient(135deg,var(--gold-light),var(--gold))}
-.btn-outline{background:transparent;color:var(--gold);border:1px solid var(--gold)}
-.btn-outline:hover{background:rgba(201,168,76,0.1);transform:translateY(-1px)}
-.btn-ghost{background:transparent;color:var(--text-2);border:1px solid var(--border)}
-.btn-ghost:hover{color:var(--text);border-color:var(--text-3)}
-.btn-rose{background:linear-gradient(135deg,var(--rose),#a0455a);color:#fff}
-.btn-rose:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(212,120,138,0.35)}
+/* ════════ BUTTONS ════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:'Hind Siliguri',sans-serif;font-size:.86rem;font-weight:600;padding:9px 20px;border-radius:var(--r2);border:none;transition:var(--tr);white-space:nowrap}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#08080f;box-shadow:0 3px 14px rgba(201,168,76,.26)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(201,168,76,.44);filter:brightness(1.08)}
+.btn-out{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.btn-out:hover{background:rgba(201,168,76,.1);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--bd)}
+.btn-ghost:hover{color:var(--t1);border-color:var(--t3)}
+.btn-rose{background:linear-gradient(135deg,var(--rose),#9a3550);color:#fff}
+.btn-rose:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(212,120,138,.38)}
 .btn-ok{background:var(--ok);color:#fff}
 .btn-ok:hover{background:#3d9060;transform:translateY(-1px)}
 .btn-err{background:var(--err);color:#fff}
 .btn-err:hover{background:#b83c3c;transform:translateY(-1px)}
-.btn-sm{padding:5px 12px;font-size:.78rem}
-.btn-lg{padding:12px 28px;font-size:.96rem;border-radius:var(--r)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-sm{padding:5px 12px;font-size:.76rem}
+.btn-lg{padding:12px 28px;font-size:.95rem;border-radius:var(--r)}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
 
-/* ===== HERO ===== */
-.hero{
-  padding:80px 20px 64px;text-align:center;position:relative;overflow:hidden;
-  background:linear-gradient(180deg,rgba(201,168,76,0.06) 0%,transparent 60%);
-  border-bottom:1px solid var(--border);
-}
-.hero-label{
-  font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:18px;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-}
-.hero-line{width:40px;height:1px;background:var(--gold);opacity:.5}
-.hero-title{
-  font-family:'Playfair Display',serif;font-style:italic;
-  font-size:clamp(2.2rem,6vw,4rem);line-height:1.15;color:var(--text);margin-bottom:14px;
-}
-.hero-title .g{color:var(--gold)}
-.hero-title .r{color:var(--rose-light)}
-.hero-desc{color:var(--text-2);font-size:.95rem;line-height:1.75;margin-bottom:32px;max-width:560px;margin-left:auto;margin-right:auto}
-.search-wrap{max-width:480px;margin:0 auto}
-.search-row{
-  display:flex;background:var(--card);border:1px solid var(--border);
-  border-radius:40px;overflow:hidden;transition:border-color .25s,box-shadow .25s;
-}
-.search-row:focus-within{border-color:var(--gold);box-shadow:var(--sh2)}
-.search-row input{flex:1;padding:12px 20px;background:none;border:none;color:var(--text);font-family:'Hind Siliguri',sans-serif;font-size:.92rem;outline:none}
-.search-row input::placeholder{color:var(--text-3)}
-.search-row button{padding:8px 16px;background:var(--gold);border:none;color:#080810;font-size:1rem;margin:4px;border-radius:32px;transition:var(--tr)}
-.search-row button:hover{background:var(--gold-light)}
+/* ════════ BADGES ════════ */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:16px;font-size:.68rem;font-weight:700;letter-spacing:.04em}
+.badge-new{background:rgba(82,176,122,.14);color:var(--ok);border:1px solid rgba(82,176,122,.25)}
+.badge-regular{background:rgba(74,140,255,.14);color:var(--blue);border:1px solid rgba(74,140,255,.25)}
+.badge-vip{background:rgba(201,168,76,.18);color:var(--gold);border:1px solid rgba(201,168,76,.35)}
+.badge-reseller{background:rgba(212,120,138,.14);color:var(--rose2);border:1px solid rgba(212,120,138,.28)}
+.badge-admin{background:rgba(224,80,82,.14);color:var(--err);border:1px solid rgba(224,80,82,.25)}
+.badge-free{background:rgba(82,176,122,.9);color:#fff;font-size:.64rem;padding:2px 7px;border-radius:14px}
+.badge-sale{background:rgba(224,80,82,.88);color:#fff;font-size:.64rem;padding:2px 7px;border-radius:14px}
+.badge-feat{background:rgba(201,168,76,.88);color:#08080f;font-size:.62rem;padding:2px 7px;border-radius:13px}
 
-/* ===== SECTIONS ===== */
-.sec{padding:36px 0 52px}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
-.sec-title{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:700;color:var(--text)}
+/* ════════ HERO ════════ */
+.hero{padding:80px 18px 64px;text-align:center;background:linear-gradient(180deg,rgba(201,168,76,.07) 0%,transparent 60%);border-bottom:1px solid var(--bd);position:relative;overflow:hidden}
+.hero-tag{font-size:.66rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:10px}
+.hero-line{width:36px;height:1px;background:var(--gold);opacity:.5}
+.hero-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(2rem,6vw,3.8rem);line-height:1.15;color:var(--t1);margin-bottom:12px}
+.hero-title .g{color:var(--gold)}.hero-title .r{color:var(--rose2)}
+.hero-desc{color:var(--t2);font-size:.93rem;line-height:1.78;margin-bottom:30px;max-width:540px;margin-left:auto;margin-right:auto}
+.search-box{max-width:480px;margin:0 auto;display:flex;background:var(--c1);border:1px solid var(--bd);border-radius:40px;overflow:hidden;transition:border-color .25s,box-shadow .25s}
+.search-box:focus-within{border-color:var(--gold);box-shadow:var(--glow)}
+.search-box input{flex:1;padding:12px 20px;background:none;border:none;color:var(--t1);font-size:.9rem;outline:none;font-family:'Hind Siliguri',sans-serif}
+.search-box input::placeholder{color:var(--t3)}
+.search-box button{padding:7px 15px;background:var(--gold);border:none;color:#08080f;font-size:1rem;margin:4px;border-radius:32px;transition:var(--tr)}
+.search-box button:hover{background:var(--gold2)}
+
+/* ════════ SECTIONS ════════ */
+.sec{padding:32px 0 48px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:22px;padding-bottom:11px;border-bottom:1px solid var(--bd)}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--t1)}
 .sec-title span{color:var(--gold)}
+.pills{display:flex;gap:7px;flex-wrap:wrap;padding:22px 0 6px}
+.pill{padding:7px 17px;border-radius:26px;font-size:.78rem;font-weight:600;border:1px solid var(--bd);color:var(--t2);background:transparent;transition:var(--tr)}
+.pill:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.06)}
+.pill.on{background:var(--gold);color:#08080f;border-color:var(--gold)}
 
-/* ===== PILLS ===== */
-.pills{display:flex;gap:8px;flex-wrap:wrap;padding:24px 0 8px}
-.pill{
-  padding:7px 18px;border-radius:28px;font-size:.8rem;font-weight:600;
-  border:1px solid var(--border);color:var(--text-2);background:transparent;
-  font-family:'Hind Siliguri',sans-serif;transition:var(--tr);
-}
-.pill:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.07)}
-.pill.on{background:var(--gold);color:#080810;border-color:var(--gold)}
-
-/* ===== BOOK GRID ===== */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:20px}
-
-/* ===== BOOK CARD ===== */
-.bcard{
-  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
-  overflow:hidden;cursor:pointer;transition:var(--tr);position:relative;
-}
-.bcard:hover{
-  transform:translateY(-7px);
-  border-color:var(--border2);
-  box-shadow:0 16px 48px rgba(0,0,0,0.5),0 0 0 1px rgba(201,168,76,0.2);
-}
-.bcard-img{aspect-ratio:2/3;overflow:hidden;background:var(--card2);position:relative}
-.bcard-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-.bcard:hover .bcard-img img{transform:scale(1.06)}
-.bcard-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--gold);background:linear-gradient(135deg,var(--card2),var(--card))}
-.tag-free{position:absolute;top:8px;left:8px;background:var(--ok);color:#fff;font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:16px;text-transform:uppercase}
-.tag-feat{position:absolute;top:8px;right:8px;background:rgba(201,168,76,.88);color:#080810;font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:14px}
-.bcard-body{padding:13px}
-.bcard-cat{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);margin-bottom:5px}
-.bcard-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.bcard-author{font-size:.75rem;color:var(--text-2);margin-bottom:9px}
-.bcard-foot{display:flex;align-items:center;justify-content:space-between}
-.bcard-price{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--gold)}
-.bcard-price.free{color:var(--ok)}
-.stars{font-size:.75rem;color:var(--gold);letter-spacing:1px}
-.btn-more{width:100%;margin-top:10px;padding:7px;background:transparent;border:1px solid var(--border);border-radius:var(--r2);color:var(--text-2);font-family:'Hind Siliguri',sans-serif;font-size:.78rem;transition:var(--tr)}
-.btn-more:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.06)}
-
-/* Featured scroll */
-.feat-scroll{display:flex;gap:16px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x mandatory}
+/* ════════ BOOK CARD ════════ */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:18px}
+.bc{background:var(--c1);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:var(--tr);position:relative}
+.bc:hover{transform:translateY(-7px);border-color:var(--bd2);box-shadow:0 14px 40px rgba(0,0,0,.5),var(--glow)}
+.bc-img{aspect-ratio:2/3;overflow:hidden;background:var(--c2);position:relative}
+.bc-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.bc:hover .bc-img img{transform:scale(1.06)}
+.bc-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;color:var(--gold)}
+.bc-tags{position:absolute;top:7px;left:7px;display:flex;flex-direction:column;gap:4px}
+.bc-feat{position:absolute;top:7px;right:7px}
+.bc-body{padding:12px}
+.bc-cat{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);margin-bottom:4px}
+.bc-title{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:700;color:var(--t1);line-height:1.3;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.bc-author{font-size:.73rem;color:var(--t2);margin-bottom:8px}
+.bc-foot{display:flex;align-items:center;justify-content:space-between}
+.bc-price{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--gold)}
+.bc-price.free{color:var(--ok)}
+.bc-price .orig{text-decoration:line-through;font-size:.78rem;color:var(--t3);margin-right:4px}
+.bc-stars{font-size:.72rem;color:var(--gold);letter-spacing:.5px}
+.btn-more{width:100%;margin-top:10px;padding:7px;background:transparent;border:1px solid var(--bd);border-radius:var(--r3);color:var(--t2);font-size:.76rem;transition:var(--tr)}
+.btn-more:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.05)}
+.feat-scroll{display:flex;gap:14px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x mandatory}
 .feat-scroll::-webkit-scrollbar{height:4px}
-.feat-scroll .bcard{min-width:160px;max-width:160px;scroll-snap-align:start;flex-shrink:0}
+.feat-scroll .bc{min-width:155px;max-width:155px;scroll-snap-align:start;flex-shrink:0}
 
-/* ===== BOOK DETAIL ===== */
-.detail-wrap{max-width:960px;margin:0 auto;padding:36px 20px}
-.back{display:inline-flex;align-items:center;gap:7px;background:none;border:none;color:var(--text-2);font-family:'Hind Siliguri',sans-serif;font-size:.88rem;margin-bottom:28px;transition:var(--tr)}
-.back:hover{color:var(--gold)}
-.detail-grid{display:grid;grid-template-columns:240px 1fr;gap:40px;margin-bottom:40px}
-.detail-cover{aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh),0 0 40px rgba(201,168,76,.1);position:sticky;top:80px}
-.detail-cover img{width:100%;height:100%;object-fit:cover}
-.detail-cover-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:4rem;color:var(--gold);background:linear-gradient(135deg,var(--card),var(--card2))}
-.detail-info{display:flex;flex-direction:column;gap:14px}
-.detail-cat{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gold)}
-.detail-title{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(1.6rem,3.5vw,2.4rem);line-height:1.2;color:var(--text)}
-.detail-author{font-size:.95rem;color:var(--text-2)}
-.detail-author em{color:var(--rose-light);font-style:normal}
-.meta-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r2)}
-.meta-i{display:flex;flex-direction:column;gap:3px}
-.meta-l{font-size:.65rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em}
-.meta-v{font-size:.85rem;color:var(--text-2)}
-.detail-price{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;color:var(--gold)}
-.detail-price.free{color:var(--ok)}
-.detail-desc{padding:18px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r2);border-left:3px solid var(--gold);color:var(--text-2);font-size:.9rem;line-height:1.8}
-.act-btns{display:flex;gap:10px;flex-wrap:wrap}
+/* ════════ BOOK DETAIL ════════ */
+.det-wrap{max-width:960px;margin:0 auto;padding:32px 18px}
+.back-btn{display:inline-flex;align-items:center;gap:7px;background:none;border:none;color:var(--t2);font-size:.86rem;margin-bottom:26px;transition:var(--tr);padding:0}
+.back-btn:hover{color:var(--gold)}
+.det-grid{display:grid;grid-template-columns:230px 1fr;gap:36px;margin-bottom:36px}
+.det-cover{position:sticky;top:80px}
+.det-cover-main{aspect-ratio:2/3;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh),0 0 36px rgba(201,168,76,.1);margin-bottom:10px}
+.det-cover-main img{width:100%;height:100%;object-fit:cover}
+.det-cover-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:4rem;color:var(--gold);background:linear-gradient(135deg,var(--c1),var(--c2))}
+.det-screenshots{display:flex;gap:7px;overflow-x:auto}
+.det-screenshots img{width:60px;height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--bd);cursor:pointer;transition:var(--tr);flex-shrink:0}
+.det-screenshots img:hover{border-color:var(--gold)}
+.det-info{display:flex;flex-direction:column;gap:13px}
+.det-cat{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gold)}
+.det-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.6rem,3.5vw,2.4rem);line-height:1.2;color:var(--t1)}
+.det-author{font-size:.92rem;color:var(--t2)}
+.det-author em{color:var(--rose2);font-style:normal}
+.meta-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;padding:13px;background:var(--c2);border:1px solid var(--bd);border-radius:var(--r2)}
+.mi{display:flex;flex-direction:column;gap:3px}
+.ml{font-size:.63rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.05em}
+.mv{font-size:.84rem;color:var(--t2)}
+.det-price-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.det-price{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;color:var(--gold)}
+.det-price.free{color:var(--ok)}
+.det-orig-price{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--t3);text-decoration:line-through}
+.det-discount-tag{background:var(--err);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:14px}
+.coupon-row{display:flex;gap:7px;align-items:center}
+.coupon-row input{flex:1;padding:9px 13px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r2);color:var(--t1);font-family:'Hind Siliguri',sans-serif;font-size:.86rem;outline:none;transition:border-color .22s}
+.coupon-row input:focus{border-color:var(--gold)}
+.coupon-row input::placeholder{color:var(--t3)}
+.det-desc{padding:16px;background:var(--c2);border:1px solid var(--bd);border-radius:var(--r2);border-left:3px solid var(--gold);color:var(--t2);font-size:.88rem;line-height:1.8}
+.act-btns{display:flex;gap:9px;flex-wrap:wrap}
+.coupon-result{font-size:.82rem;padding:8px 12px;border-radius:var(--r3);margin-top:4px}
+.coupon-result.ok{background:rgba(82,176,122,.12);color:var(--ok);border:1px solid rgba(82,176,122,.25)}
+.coupon-result.err{background:rgba(224,82,82,.12);color:var(--err);border:1px solid rgba(224,82,82,.2)}
 
-/* ===== REVIEWS ===== */
-.reviews-sec{border-top:1px solid var(--border);padding-top:36px;margin-top:36px}
-.avg-box{display:flex;align-items:center;gap:18px;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:20px}
-.avg-num{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:700;color:var(--gold)}
-.avg-stars{font-size:1.2rem;color:var(--gold)}
-.avg-cnt{font-size:.8rem;color:var(--text-3)}
-.rev-card{padding:18px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:12px}
-.rev-head{display:flex;justify-content:space-between;margin-bottom:8px}
-.rev-name{font-weight:600;font-size:.9rem}
-.rev-date{font-size:.74rem;color:var(--text-3)}
-.rev-text{font-size:.87rem;color:var(--text-2);line-height:1.6}
-.rev-form{padding:20px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-top:20px}
-.rev-form h3{font-family:'Cormorant Garamond',serif;font-size:1.25rem;margin-bottom:14px}
-.star-row{display:flex;gap:7px;margin-bottom:13px}
-.star-btn{font-size:1.5rem;background:none;border:none;color:var(--text-3);transition:color .18s,transform .14s}
-.star-btn:hover,.star-btn.on{color:var(--gold);transform:scale(1.12)}
+/* ════════ REVIEWS ════════ */
+.rev-sec{border-top:1px solid var(--bd);padding-top:32px;margin-top:32px}
+.avg-box{display:flex;align-items:center;gap:16px;padding:18px;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:18px}
+.avg-n{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:700;color:var(--gold)}
+.avg-st{font-size:1.2rem;color:var(--gold)}
+.avg-c{font-size:.78rem;color:var(--t3)}
+.rv{padding:16px;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:11px}
+.rv-hd{display:flex;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+.rv-name{font-weight:600;font-size:.88rem;display:flex;align-items:center;gap:6px}
+.rv-date{font-size:.72rem;color:var(--t3)}
+.rv-txt{font-size:.85rem;color:var(--t2);line-height:1.6}
+.rev-form{padding:18px;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r);margin-top:18px}
+.rev-form h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-bottom:13px}
+.star-row{display:flex;gap:6px;margin-bottom:12px}
+.s-btn{font-size:1.5rem;background:none;border:none;color:var(--t3);transition:color .16s,transform .12s}
+.s-btn:hover,.s-btn.on{color:var(--gold);transform:scale(1.12)}
 
-/* ===== FORMS ===== */
+/* ════════ FORMS ════════ */
 .fg{display:flex;flex-direction:column;gap:5px}
-.fl{font-size:.76rem;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.04em}
-.fi,.fs,.ft{
-  background:var(--bg);border:1px solid var(--border);color:var(--text);
-  border-radius:var(--r2);padding:10px 14px;font-family:'Hind Siliguri',sans-serif;
-  font-size:.9rem;width:100%;outline:none;transition:border-color .22s,box-shadow .22s;
-}
+.fl{font-size:.74rem;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.04em}
+.fi,.fs,.ft{background:var(--bg);border:1px solid var(--bd);color:var(--t1);border-radius:var(--r2);padding:10px 13px;font-family:'Hind Siliguri',sans-serif;font-size:.88rem;width:100%;outline:none;transition:border-color .22s,box-shadow .22s}
 .fi:focus,.fs:focus,.ft:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1)}
-.fi::placeholder,.ft::placeholder{color:var(--text-3)}
-.ft{resize:vertical;min-height:90px}
+.fi::placeholder,.ft::placeholder{color:var(--t3)}
+.ft{resize:vertical;min-height:88px}
 .fs{cursor:pointer;appearance:none}
-[data-theme="light"] .fi,[data-theme="light"] .fs,[data-theme="light"] .ft{background:#fff}
-.fg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+[data-theme=light] .fi,[data-theme=light] .fs,[data-theme=light] .ft{background:#fff}
+.fg-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
 .fg-grid .full{grid-column:1/-1}
-.chk-row{display:flex;align-items:center;gap:8px}
-.chk-row input{width:16px;height:16px;accent-color:var(--gold)}
-.chk-row label{font-size:.87rem;color:var(--text-2)}
+.chk{display:flex;align-items:center;gap:7px}
+.chk input{width:15px;height:15px;accent-color:var(--gold)}
+.chk label{font-size:.84rem;color:var(--t2)}
 
-/* ===== MODALS ===== */
-.overlay{
-  display:none;position:fixed;inset:0;z-index:200;
-  background:rgba(0,0,0,0.75);backdrop-filter:blur(5px);
-  align-items:center;justify-content:center;padding:16px;
-}
-.overlay.on{display:flex;animation:fadeUp .22s ease}
-.modal{
-  background:var(--modal-bg);border:1px solid var(--border);border-radius:16px;
-  max-width:540px;width:100%;max-height:92vh;overflow-y:auto;
-  box-shadow:0 24px 80px rgba(0,0,0,0.7);animation:scaleIn .28s ease;
-}
-.m-head{display:flex;align-items:center;justify-content:space-between;padding:22px 26px 0}
-.m-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700}
-.m-close{width:34px;height:34px;background:none;border:none;color:var(--text-2);font-size:1.1rem;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
-.m-close:hover{background:rgba(255,255,255,.09);color:var(--text)}
-.m-body{padding:22px 26px 26px}
+/* ════════ MODALS ════════ */
+.ov{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.76);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:16px}
+.ov.on{display:flex;animation:fadeUp .22s ease}
+.modal{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;max-width:530px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.7);animation:scaleIn .26s ease}
+.m-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 0}
+.m-title{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700}
+.m-close{width:32px;height:32px;background:none;border:none;color:var(--t2);font-size:1.1rem;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.m-close:hover{background:rgba(255,255,255,.09);color:var(--t1)}
+.m-body{padding:20px 24px 24px}
+
+/* Confirm dialog */
+.confirm-box{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;max-width:380px;width:100%;padding:28px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.7);animation:scaleIn .26s ease}
+.confirm-icon{font-size:2.8rem;display:block;margin-bottom:12px}
+.confirm-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;margin-bottom:8px}
+.confirm-msg{font-size:.88rem;color:var(--t2);line-height:1.6;margin-bottom:22px}
+.confirm-btns{display:flex;gap:10px;justify-content:center}
 
 /* Payment */
-.pay-tabs{display:flex;gap:3px;margin-bottom:20px;background:var(--bg2);padding:3px;border-radius:var(--r2)}
-.ptab{flex:1;padding:9px 6px;background:none;border:none;color:var(--text-2);font-family:'Hind Siliguri',sans-serif;font-size:.8rem;font-weight:600;border-radius:6px;transition:var(--tr)}
-.ptab.on{background:var(--gold);color:#080810}
-.pcontent{display:none}
-.pcontent.on{display:block;animation:fadeUp .22s ease}
-.pay-num-box{text-align:center;padding:20px;background:rgba(201,168,76,.06);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:16px}
-.pay-num{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:700;color:var(--gold);letter-spacing:.05em;margin:7px 0}
-.copy-btn{background:none;border:1px solid var(--border);color:var(--text-2);padding:5px 12px;border-radius:6px;font-family:'Hind Siliguri',sans-serif;font-size:.76rem;transition:var(--tr)}
-.copy-btn:hover{border-color:var(--gold);color:var(--gold)}
-.copy-btn.ok{border-color:var(--ok);color:var(--ok)}
-.pay-steps{list-style:none;margin-bottom:16px}
-.pay-steps li{display:flex;align-items:flex-start;gap:10px;padding:6px 0;color:var(--text-2);font-size:.85rem}
-.snum{width:20px;height:20px;flex-shrink:0;background:var(--gold);color:#080810;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700}
-.stepper{display:flex;align-items:center;margin-bottom:24px}
-.si{display:flex;align-items:center}
-.sc{width:30px;height:30px;border-radius:50%;background:var(--card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.76rem;font-weight:600;color:var(--text-2);transition:var(--tr)}
-.sc.act{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1)}
-.sc.done{background:var(--gold);border-color:var(--gold);color:#080810}
-.sl{flex:1;height:2px;background:var(--border);margin:0 6px;min-width:20px}
-.sl.done{background:var(--gold)}
-.up-area{border:2px dashed var(--border);border-radius:var(--r2);padding:28px;text-align:center;position:relative;transition:var(--tr)}
+.pay-tabs{display:flex;gap:3px;margin-bottom:18px;background:var(--bg);padding:3px;border-radius:var(--r2)}
+.p-tab{flex:1;padding:9px 5px;background:none;border:none;color:var(--t2);font-family:'Hind Siliguri',sans-serif;font-size:.78rem;font-weight:600;border-radius:6px;transition:var(--tr)}
+.p-tab.on{background:var(--gold);color:#08080f}
+.p-content{display:none}
+.p-content.on{display:block;animation:fadeUp .22s ease}
+.p-num-box{text-align:center;padding:18px;background:rgba(201,168,76,.05);border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:14px}
+.p-num{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;color:var(--gold);letter-spacing:.05em;margin:6px 0}
+.cp-btn{background:none;border:1px solid var(--bd);color:var(--t2);padding:4px 11px;border-radius:5px;font-family:'Hind Siliguri',sans-serif;font-size:.74rem;transition:var(--tr)}
+.cp-btn:hover{border-color:var(--gold);color:var(--gold)}
+.cp-btn.ok{border-color:var(--ok);color:var(--ok)}
+.p-steps{list-style:none;margin-bottom:14px}
+.p-steps li{display:flex;align-items:flex-start;gap:9px;padding:5px 0;color:var(--t2);font-size:.83rem}
+.sn{width:19px;height:19px;flex-shrink:0;background:var(--gold);color:#08080f;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700}
+.stepper{display:flex;align-items:center;margin-bottom:22px}
+.s-i{display:flex;align-items:center}
+.s-c{width:28px;height:28px;border-radius:50%;background:var(--c1);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:600;color:var(--t2);transition:var(--tr)}
+.s-c.act{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.1)}
+.s-c.done{background:var(--gold);border-color:var(--gold);color:#08080f}
+.s-l{flex:1;height:2px;background:var(--bd);margin:0 5px;min-width:18px}
+.s-l.done{background:var(--gold)}
+.up-area{border:2px dashed var(--bd);border-radius:var(--r2);padding:24px;text-align:center;position:relative;transition:var(--tr)}
 .up-area:hover,.up-area.drag{border-color:var(--gold);background:rgba(201,168,76,.04)}
 .up-area input[type=file]{position:absolute;inset:0;opacity:0}
-.up-icon{font-size:1.8rem;color:var(--text-3);margin-bottom:7px}
-.up-text{font-size:.82rem;color:var(--text-2)}
-.up-preview img{max-height:110px;border-radius:7px;border:1px solid var(--border);margin:10px auto 0}
-.order-ok{text-align:center;padding:36px 16px}
-.ok-icon{font-size:3.5rem;display:block;margin-bottom:14px}
-.ok-title{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--ok);margin-bottom:8px}
-.order-id{background:var(--card);border:1px solid var(--border);border-radius:var(--r2);padding:10px 18px;display:inline-block;font-family:monospace;color:var(--gold);font-size:.85rem;margin:10px 0}
+.up-prev img{max-height:100px;border-radius:6px;border:1px solid var(--bd);margin:8px auto 0}
+.ord-ok{text-align:center;padding:32px 16px}
+.ok-icon{font-size:3.2rem;display:block;margin-bottom:12px}
+.ok-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--ok);margin-bottom:7px}
+.ord-id-box{background:var(--c1);border:1px solid var(--bd);border-radius:var(--r3);padding:9px 16px;display:inline-block;font-family:monospace;color:var(--gold);font-size:.82rem;margin:8px 0}
 
-/* ===== AUTH ===== */
-.auth-pg{min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:center;padding:36px 20px}
-.auth-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:36px;max-width:400px;width:100%;box-shadow:var(--sh)}
-.auth-logo{font-family:'Playfair Display',serif;font-style:italic;font-size:1.75rem;color:var(--gold);text-align:center;margin-bottom:5px}
-.auth-sub{text-align:center;color:var(--text-2);font-size:.86rem;margin-bottom:24px}
-.auth-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:24px}
-.atab{flex:1;padding:11px;background:none;border:none;color:var(--text-2);font-family:'Hind Siliguri',sans-serif;font-weight:600;font-size:.9rem;border-bottom:2px solid transparent;transition:var(--tr);margin-bottom:-1px}
-.atab.on{color:var(--gold);border-bottom-color:var(--gold)}
-.divider{display:flex;align-items:center;gap:10px;margin:16px 0}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.divider span{font-size:.76rem;color:var(--text-3)}
-.g-btn{width:100%;padding:11px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);display:flex;align-items:center;justify-content:center;gap:9px;font-family:'Hind Siliguri',sans-serif;font-size:.9rem;font-weight:500;transition:var(--tr)}
-.g-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.05)}
+/* ════════ AUTH ════════ */
+.auth-pg{min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:center;padding:32px 18px}
+.auth-box{background:var(--c1);border:1px solid var(--bd);border-radius:16px;padding:32px;max-width:395px;width:100%;box-shadow:var(--sh)}
+.auth-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.7rem;color:var(--gold);text-align:center;margin-bottom:5px}
+.auth-sub{text-align:center;color:var(--t2);font-size:.84rem;margin-bottom:22px}
+.a-tabs{display:flex;border-bottom:1px solid var(--bd);margin-bottom:22px}
+.a-tab{flex:1;padding:10px;background:none;border:none;color:var(--t2);font-family:'Hind Siliguri',sans-serif;font-weight:600;font-size:.88rem;border-bottom:2px solid transparent;transition:var(--tr);margin-bottom:-1px}
+.a-tab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.divider{display:flex;align-items:center;gap:10px;margin:15px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--bd)}
+.divider span{font-size:.74rem;color:var(--t3)}
+.g-btn{width:100%;padding:10px;background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r2);color:var(--t1);display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Hind Siliguri',sans-serif;font-size:.88rem;font-weight:500;transition:var(--tr)}
+.g-btn:hover{border-color:var(--gold);background:rgba(201,168,76,.04)}
 
-/* ===== PROFILE ===== */
-.profile-pg{max-width:860px;margin:0 auto;padding:36px 20px}
-.prof-head{display:flex;align-items:center;gap:18px;padding:20px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:28px}
-.prof-av{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:#080810;flex-shrink:0}
-.prof-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700}
-.prof-email{color:var(--text-2);font-size:.86rem}
-.ptabs{display:flex;gap:3px;border-bottom:1px solid var(--border);margin-bottom:24px}
-.ptab2{padding:9px 18px;background:none;border:none;color:var(--text-2);font-size:.86rem;font-family:'Hind Siliguri',sans-serif;font-weight:500;border-bottom:2px solid transparent;transition:var(--tr);margin-bottom:-1px}
-.ptab2.on{color:var(--gold);border-bottom-color:var(--gold)}
-.ptcontent{display:none}
-.ptcontent.on{display:block;animation:fadeUp .28s ease}
-.ord-card{display:flex;gap:14px;padding:18px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:13px}
-.ord-cov{width:55px;flex-shrink:0;aspect-ratio:2/3;border-radius:6px;overflow:hidden;background:var(--card2)}
-.ord-cov img{width:100%;height:100%;object-fit:cover}
-.ord-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;margin-bottom:4px}
-.ord-meta{font-size:.76rem;color:var(--text-3);margin-bottom:9px}
-.sbadge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:18px;font-size:.74rem;font-weight:600}
+/* ════════ PROFILE ════════ */
+.prof-pg{max-width:860px;margin:0 auto;padding:32px 18px}
+.prof-hd{display:flex;align-items:flex-start;gap:16px;padding:20px;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:26px;flex-wrap:wrap}
+.prof-av{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold3));display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;color:#08080f;flex-shrink:0}
+.prof-info{flex:1}
+.prof-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.prof-email{color:var(--t2);font-size:.84rem;margin-bottom:8px}
+.prof-stats{display:flex;gap:14px;flex-wrap:wrap}
+.ps{display:flex;flex-direction:column;align-items:center;padding:8px 14px;background:var(--c2);border:1px solid var(--bd);border-radius:var(--r2)}
+.ps-v{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold)}
+.ps-l{font-size:.66rem;color:var(--t3);text-transform:uppercase;letter-spacing:.04em}
+.p-tabs{display:flex;gap:2px;border-bottom:1px solid var(--bd);margin-bottom:22px;flex-wrap:wrap}
+.p-tab{padding:9px 16px;background:none;border:none;color:var(--t2);font-size:.84rem;font-family:'Hind Siliguri',sans-serif;font-weight:500;border-bottom:2px solid transparent;transition:var(--tr);margin-bottom:-1px}
+.p-tab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.p-tc{display:none}
+.p-tc.on{display:block;animation:fadeUp .28s ease}
+.ord-card{display:flex;gap:13px;padding:16px;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:12px;transition:var(--tr)}
+.ord-card:hover{border-color:rgba(201,168,76,.3)}
+.oc-img{width:52px;flex-shrink:0;aspect-ratio:2/3;border-radius:5px;overflow:hidden;background:var(--c2)}
+.oc-img img{width:100%;height:100%;object-fit:cover}
+.oc-t{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:700;margin-bottom:4px}
+.oc-m{font-size:.74rem;color:var(--t3);margin-bottom:8px}
+.sb{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:17px;font-size:.72rem;font-weight:600}
 .s-pend{background:rgba(224,160,82,.14);color:var(--warn)}
 .s-app{background:rgba(82,176,122,.14);color:var(--ok)}
 .s-rej{background:rgba(224,82,82,.14);color:var(--err)}
 
-/* ===== ADMIN ===== */
-.admin-pg{max-width:1100px;margin:0 auto;padding:36px 20px}
-.admin-title{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:700}
-.anav{display:flex;gap:3px;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:28px}
-.abtn{padding:9px 18px;background:none;border:none;color:var(--text-2);font-family:'Hind Siliguri',sans-serif;font-size:.86rem;font-weight:500;border-bottom:2px solid transparent;transition:var(--tr);margin-bottom:-1px}
-.abtn.on{color:var(--gold);border-bottom-color:var(--gold)}
-.asec{display:none}
-.asec.on{display:block;animation:fadeUp .28s ease}
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin-bottom:28px}
-.scard{padding:18px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);transition:var(--tr)}
-.scard:hover{transform:translateY(-2px);border-color:var(--border2)}
-.s-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:7px}
+/* ════════ ADMIN ════════ */
+.adm-pg{max-width:1100px;margin:0 auto;padding:32px 18px}
+.adm-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700}
+.a-nav{display:flex;gap:2px;flex-wrap:wrap;border-bottom:1px solid var(--bd);margin-bottom:26px}
+.a-nav-btn{padding:9px 16px;background:none;border:none;color:var(--t2);font-family:'Hind Siliguri',sans-serif;font-size:.84rem;font-weight:500;border-bottom:2px solid transparent;transition:var(--tr);margin-bottom:-1px}
+.a-nav-btn.on{color:var(--gold);border-bottom-color:var(--gold)}
+.a-sec{display:none}
+.a-sec.on{display:block;animation:fadeUp .28s ease}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin-bottom:26px}
+.sc{padding:16px;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r);transition:var(--tr)}
+.sc:hover{transform:translateY(-2px);border-color:var(--bd2)}
+.s-lbl{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);margin-bottom:6px}
 .s-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--gold)}
-.s-note{font-size:.72rem;color:var(--text-3);margin-top:3px}
-.scard.hi{border-color:rgba(224,160,82,.35);background:rgba(224,160,82,.04)}
-.scard.hi .s-val{color:var(--warn)}
-.scard.ro{border-color:rgba(212,120,138,.3);background:rgba(212,120,138,.04)}
-.scard.ro .s-val{color:var(--rose)}
-.af{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:28px}
-.af-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:18px}
+.s-sub{font-size:.7rem;color:var(--t3);margin-top:2px}
+.sc.hi{border-color:rgba(224,160,82,.34);background:rgba(224,160,82,.04)}.sc.hi .s-val{color:var(--warn)}
+.sc.ro{border-color:rgba(212,120,138,.28);background:rgba(212,120,138,.04)}.sc.ro .s-val{color:var(--rose)}
+.sc.bl{border-color:rgba(74,140,255,.28);background:rgba(74,140,255,.04)}.sc.bl .s-val{color:var(--blue)}
+.af{background:var(--c1);border:1px solid var(--bd);border-radius:var(--r);padding:22px;margin-bottom:26px}
+.af-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;margin-bottom:16px}
 .at{width:100%;border-collapse:collapse}
-.at th{text-align:left;padding:10px 14px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);border-bottom:1px solid var(--border)}
-.at td{padding:12px 14px;border-bottom:1px solid rgba(201,168,76,.06);vertical-align:middle}
+.at th{text-align:left;padding:9px 12px;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);border-bottom:1px solid var(--bd)}
+.at td{padding:11px 12px;border-bottom:1px solid rgba(201,168,76,.06);vertical-align:middle}
 .at tr:hover td{background:rgba(201,168,76,.02)}
-.t-cov{width:33px;height:50px;border-radius:4px;object-fit:cover}
-.t-cov-ph{width:33px;height:50px;background:var(--card2);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
-.ao-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:13px}
-.ao-card.pend{border-left:3px solid var(--warn)}
-.ao-card.approved{border-left:3px solid var(--ok)}
-.ao-card.rejected{border-left:3px solid var(--err)}
-.ao-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:13px}
-.ao-user{font-weight:600;font-size:.92rem}
-.ao-email{font-size:.76rem;color:var(--text-3)}
-.ao-book{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700}
-.ao-dets{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:13px}
-.ao-dl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3)}
-.ao-dv{font-size:.83rem;color:var(--text-2)}
-.ao-acts{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
-.res-card{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:10px;flex-wrap:wrap}
-.res-name{font-weight:600;font-size:.9rem}
-.res-email{font-size:.76rem;color:var(--text-3)}
-.res-com{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--rose)}
-.cat-item{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:9px}
-.cat-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600}
+.t-cov{width:31px;height:47px;border-radius:3px;object-fit:cover}
+.t-cov-ph{width:31px;height:47px;background:var(--c2);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.ao-card{background:var(--c1);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.ao-card.pend{border-left:3px solid var(--warn)}.ao-card.approved{border-left:3px solid var(--ok)}.ao-card.rejected{border-left:3px solid var(--err)}
+.ao-hd{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:9px;margin-bottom:12px}
+.ao-user{font-weight:600;font-size:.9rem}
+.ao-email{font-size:.74rem;color:var(--t3)}
+.ao-book{font-family:'Cormorant Garamond',serif;font-size:.98rem;font-weight:700}
+.ao-dets{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:9px;margin-bottom:12px}
+.ao-dl{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--t3)}
+.ao-dv{font-size:.82rem;color:var(--t2)}
+.ao-acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.res-card{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:15px 17px;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:9px;flex-wrap:wrap}
+.rc-info .rc-name{font-weight:600;font-size:.9rem;margin-bottom:2px}
+.rc-info .rc-email{font-size:.74rem;color:var(--t3)}
+.rc-info .rc-note{font-size:.72rem;color:var(--t3);margin-top:2px}
+.rc-right{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.rc-com{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--rose)}
+.cat-item{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:8px}
+.cat-nm{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600}
+.cpn-card{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:8px;flex-wrap:wrap;gap:8px}
+.cpn-code{font-family:monospace;font-size:1rem;font-weight:700;color:var(--gold);letter-spacing:.08em}
+.cpn-info{font-size:.78rem;color:var(--t2)}
 
-/* ===== TOAST ===== */
-#toast-wrap{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:7px}
-.toast{padding:12px 18px;border-radius:var(--r2);background:var(--card);border:1px solid var(--border);color:var(--text);font-size:.85rem;display:flex;align-items:center;gap:8px;box-shadow:var(--sh);animation:fadeUp .25s ease;max-width:280px}
-.toast.ok{border-left:3px solid var(--ok)}
-.toast.err{border-left:3px solid var(--err)}
-.toast.info{border-left:3px solid var(--gold)}
+/* ════════ TOAST ════════ */
+#toast-box{position:fixed;bottom:18px;right:18px;z-index:999;display:flex;flex-direction:column;gap:6px}
+.toast{padding:11px 17px;border-radius:var(--r2);background:var(--c1);border:1px solid var(--bd);color:var(--t1);font-size:.83rem;display:flex;align-items:center;gap:7px;box-shadow:var(--sh);animation:fadeUp .24s ease;max-width:270px}
+.toast.ok{border-left:3px solid var(--ok)}.toast.err{border-left:3px solid var(--err)}.toast.info{border-left:3px solid var(--gold)}
 
-/* ===== MISC ===== */
-.spin{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:currentColor;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
-.empty{text-align:center;padding:52px 20px;color:var(--text-3)}
-.empty-ico{font-size:3rem;margin-bottom:13px;opacity:.4}
-.empty-t{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--text-2);margin-bottom:7px}
-.empty-d{font-size:.85rem}
-.skel{background:linear-gradient(90deg,var(--card) 25%,var(--card2) 50%,var(--card) 75%);background-size:200% 100%;animation:skel 1.4s infinite;border-radius:var(--r2)}
-@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-/* ===== FOOTER ===== */
-footer{margin-top:60px;padding:40px 20px 28px;border-top:1px solid var(--border);background:var(--card2)}
-.foot-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;margin-bottom:28px}
-.foot-logo{font-family:'Playfair Display',serif;font-style:italic;font-size:1.4rem;color:var(--gold);margin-bottom:10px}
-.foot-desc{color:var(--text-2);font-size:.85rem;line-height:1.7;max-width:260px}
-.foot-ht{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:13px}
-.foot-links{display:flex;flex-direction:column;gap:9px}
-.foot-links a,.foot-links button{color:var(--text-2);font-size:.85rem;background:none;border:none;text-align:left;font-family:'Hind Siliguri',sans-serif;transition:color .2s;padding:0}
+/* ════════ FOOTER ════════ */
+footer{margin-top:60px;padding:36px 18px 26px;border-top:1px solid var(--bd);background:var(--c2)}
+.foot-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:28px;margin-bottom:24px}
+.foot-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;color:var(--gold);margin-bottom:8px}
+.foot-desc{color:var(--t2);font-size:.82rem;line-height:1.7;max-width:250px}
+.foot-ht{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:12px}
+.foot-links{display:flex;flex-direction:column;gap:8px}
+.foot-links a,.foot-links button{color:var(--t2);font-size:.83rem;background:none;border:none;text-align:left;font-family:'Hind Siliguri',sans-serif;transition:color .2s;padding:0}
 .foot-links a:hover,.foot-links button:hover{color:var(--gold)}
-.foot-btm{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:18px;border-top:1px solid var(--border);flex-wrap:wrap;gap:10px}
-.foot-copy{font-size:.76rem;color:var(--text-3)}
+.foot-btm{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid var(--bd);flex-wrap:wrap;gap:8px}
+.foot-copy{font-size:.74rem;color:var(--t3)}
 
-/* ===== RESPONSIVE ===== */
+/* ════════ RESPONSIVE ════════ */
 @media(max-width:768px){
-  .nav-links{display:none}
-  .hamburger{display:flex}
-  .detail-grid{grid-template-columns:1fr}
-  .detail-cover{max-width:210px;margin:0 auto;position:static}
-  .fg-grid{grid-template-columns:1fr}
-  .foot-grid{grid-template-columns:1fr;gap:20px}
+  .nav-links{display:none}.ham{display:flex}
+  .det-grid{grid-template-columns:1fr}.det-cover{max-width:200px;margin:0 auto;position:static}
+  .fg-grid{grid-template-columns:1fr}.foot-grid{grid-template-columns:1fr;gap:18px}
   .foot-btm{flex-direction:column;text-align:center}
   .stats-row{grid-template-columns:repeat(2,1fr)}
   .modal{border-radius:16px 16px 0 0;position:fixed;bottom:0;max-height:93vh;max-width:100%}
-  .overlay{align-items:flex-end;padding:0}
+  .ov{align-items:flex-end;padding:0}
 }
-@media(max-width:480px){
-  .grid{grid-template-columns:repeat(2,1fr);gap:12px}
-  .stats-row{grid-template-columns:repeat(2,1fr)}
-  .age-btns{flex-direction:column}
-}
+@media(max-width:480px){.grid{grid-template-columns:repeat(2,1fr);gap:11px}.stats-row{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
-<!-- ══ AGE GATE ══ -->
+<!-- ══ বয়স যাচাই ══ -->
 <div id="age-gate">
-  <div class="age-box">
-    <span class="age-icon">📚</span>
-    <div class="age-title">কামরস লাইব্রেরি</div>
-    <div class="age-sub">✦ Exclusive Knowledge Collection ✦</div>
-    <div class="age-divider"></div>
-    <div class="age-text">
-      এই প্ল্যাটফর্মে <strong>দাম্পত্য জীবন, যৌন স্বাস্থ্য ও সম্পর্ক</strong> বিষয়ক শিক্ষামূলক ইবুক রয়েছে।<br><br>
-      প্রবেশ করতে আপনাকে অবশ্যই <strong>১৮ বছর বা তদূর্ধ্ব</strong> হতে হবে।
-    </div>
-    <div class="age-btns">
+  <div class="ag-box">
+    <span class="ag-icon">📚</span>
+    <div class="ag-title">কামরস লাইব্রেরি</div>
+    <div class="ag-sub">✦ Kamros Library — Exclusive Collection ✦</div>
+    <div class="ag-line"></div>
+    <div class="ag-text">এই প্ল্যাটফর্মে <strong>দাম্পত্য জীবন, যৌন স্বাস্থ্য ও সম্পর্ক</strong> বিষয়ক শিক্ষামূলক ইবুক রয়েছে।<br><br>প্রবেশ করতে আপনাকে অবশ্যই <strong>১৮ বছর বা তদূর্ধ্ব</strong> হতে হবে।</div>
+    <div class="ag-btns">
       <button class="btn btn-gold btn-lg" onclick="enterSite()">✅ আমার বয়স ১৮+ — প্রবেশ করুন</button>
       <button class="btn btn-ghost btn-lg" onclick="location.href='https://google.com'">❌ বের হয়ে যান</button>
     </div>
-    <div class="age-note">প্রবেশ করে আপনি নিশ্চিত করছেন যে আপনি প্রাপ্তবয়স্ক এবং এই ধরনের শিক্ষামূলক কন্টেন্ট দেখার আইনগত অধিকার রাখেন।</div>
+    <div class="ag-note">প্রবেশ করে আপনি নিশ্চিত করছেন যে আপনি প্রাপ্তবয়স্ক এবং এই ধরনের শিক্ষামূলক কন্টেন্ট দেখার আইনগত অধিকার রাখেন।</div>
   </div>
 </div>
 
-<!-- ══ HEADER ══ -->
-<header class="header" id="site-header" style="display:none">
+<!-- ══ হেডার ══ -->
+<header class="hdr" id="site-hdr" style="display:none">
   <nav class="nav">
     <a class="logo" onclick="showPage('home')">
       <span class="logo-icon">📚</span>
@@ -517,15 +434,15 @@ footer{margin-top:60px;padding:40px 20px 28px;border-top:1px solid var(--border)
     <ul class="nav-links">
       <li><a href="#" onclick="showPage('home')">হোম</a></li>
       <li><a href="#" onclick="showPage('home')">বই</a></li>
-      <li><span class="badge18">🔞 18+</span></li>
+      <li><span class="b18">🔞 ১৮+</span></li>
       <li id="nl-profile" style="display:none"><a href="#" onclick="showPage('profile')">👤 প্রোফাইল</a></li>
-      <li id="nl-admin" style="display:none"><a href="#" onclick="showPage('admin')" style="color:var(--warn)">⚙️ Admin</a></li>
-      <li id="nl-login"><a href="#" onclick="showPage('auth')" class="btn btn-outline btn-sm">লগইন</a></li>
-      <li id="nl-logout" style="display:none"><button onclick="doLogout()" class="btn btn-ghost btn-sm">লগআউট</button></li>
+      <li id="nl-admin" style="display:none"><a href="#" onclick="showPage('admin')" style="color:var(--warn)">⚙️ অ্যাডমিন</a></li>
+      <li id="nl-login"><a href="#" onclick="showPage('auth')" class="btn btn-out btn-sm">লগইন</a></li>
+      <li id="nl-logout" style="display:none"><button onclick="confirmLogout()" class="btn btn-ghost btn-sm">লগআউট</button></li>
     </ul>
-    <div class="nav-actions">
-      <button class="icon-btn" id="theme-btn" onclick="toggleTheme()">🌙</button>
-      <button class="hamburger icon-btn" onclick="toggleMob()"><span></span><span></span><span></span></button>
+    <div class="nav-act">
+      <button class="ico-btn" id="theme-btn" onclick="toggleTheme()">🌙</button>
+      <button class="ham ico-btn" onclick="toggleMob()"><span></span><span></span><span></span></button>
     </div>
   </nav>
 </header>
@@ -534,36 +451,32 @@ footer{margin-top:60px;padding:40px 20px 28px;border-top:1px solid var(--border)
   <a href="#" onclick="showPage('home')">🏠 হোম</a>
   <a href="#" onclick="showPage('home')">📚 বই</a>
   <a href="#" id="mn-profile" style="display:none" onclick="showPage('profile')">👤 প্রোফাইল</a>
-  <a href="#" id="mn-admin" style="display:none;color:var(--warn)" onclick="showPage('admin')">⚙️ Admin</a>
+  <a href="#" id="mn-admin" style="display:none;color:var(--warn)" onclick="showPage('admin')">⚙️ অ্যাডমিন</a>
   <a href="#" id="mn-login" onclick="showPage('auth')">🔐 লগইন</a>
-  <button id="mn-logout" style="display:none" onclick="doLogout()">লগআউট</button>
+  <button id="mn-logout" style="display:none" onclick="confirmLogout()">লগআউট</button>
 </div>
 
-<!-- ══ CONTENT ══ -->
+<!-- ══ মূল কন্টেন্ট ══ -->
 <main id="site-main" style="display:none">
 
-<!-- HOME -->
-<div id="page-home" class="page active">
+<!-- হোম পেজ -->
+<div id="page-home" class="page on">
   <div class="hero">
-    <div class="wrap">
-      <div class="hero-label"><span class="hero-line"></span>Kamros Library — Exclusive Collection<span class="hero-line"></span></div>
+    <div class="w">
+      <div class="hero-tag"><span class="hero-line"></span>কামরস লাইব্রেরি — বিশেষ সংগ্রহ<span class="hero-line"></span></div>
       <h1 class="hero-title"><span class="g">জ্ঞানেই</span> <span class="r">সুখী</span> দাম্পত্য</h1>
       <p class="hero-desc">দাম্পত্য জীবন, যৌন স্বাস্থ্য ও সম্পর্ক বিষয়ক বিশেষজ্ঞ বাংলা ইবুক। বিশ্বস্ত লেখকদের নির্বাচিত প্রিমিয়াম সংগ্রহ।</p>
-      <div class="search-wrap">
-        <div class="search-row">
-          <input id="search-inp" type="text" placeholder="বই, লেখক বা বিষয় খুঁজুন..." oninput="renderBooks()">
-          <button>🔍</button>
-        </div>
+      <div class="search-box">
+        <input id="srch" type="text" placeholder="বই, লেখক বা বিষয় খুঁজুন..." oninput="renderBooks()">
+        <button>🔍</button>
       </div>
     </div>
   </div>
-
-  <div class="wrap">
+  <div class="w">
     <div id="feat-sec" class="sec">
-      <div class="sec-head"><h2 class="sec-title">⭐ <span>Featured</span> বই</h2></div>
+      <div class="sec-head"><h2 class="sec-title">⭐ <span>বিশেষ</span> বই</h2></div>
       <div class="feat-scroll" id="feat-grid"></div>
     </div>
-
     <div class="sec">
       <div class="pills" id="pills">
         <button class="pill on" onclick="filterCat('all',this)">সব</button>
@@ -571,7 +484,7 @@ footer{margin-top:60px;padding:40px 20px 28px;border-top:1px solid var(--border)
       </div>
       <div class="sec-head">
         <h2 class="sec-title" id="grid-title">সকল <span>বই</span></h2>
-        <span id="book-cnt" style="color:var(--text-3);font-size:.83rem"></span>
+        <span id="bcnt" style="color:var(--t3);font-size:.82rem"></span>
       </div>
       <div class="grid" id="book-grid">
         <div class="skel" style="aspect-ratio:2/3"></div>
@@ -583,131 +496,142 @@ footer{margin-top:60px;padding:40px 20px 28px;border-top:1px solid var(--border)
   </div>
 </div>
 
-<!-- DETAIL -->
-<div id="page-detail" class="page">
-  <div id="detail-content"></div>
-</div>
+<!-- বই বিস্তারিত -->
+<div id="page-detail" class="page"><div id="det-content"></div></div>
 
-<!-- AUTH -->
+<!-- লগইন/রেজিস্ট্রেশন -->
 <div id="page-auth" class="page">
   <div class="auth-pg">
     <div class="auth-box">
       <div class="auth-logo">কামরস লাইব্রেরি</div>
       <p class="auth-sub">আপনার অ্যাকাউন্টে প্রবেশ করুন</p>
-      <div class="auth-tabs">
-        <button class="atab on" onclick="authTab('login',this)">লগইন</button>
-        <button class="atab" onclick="authTab('reg',this)">রেজিস্ট্রেশন</button>
+      <div class="a-tabs">
+        <button class="a-tab on" onclick="authTab('login',this)">লগইন</button>
+        <button class="a-tab" onclick="authTab('reg',this)">রেজিস্ট্রেশন</button>
       </div>
       <button class="g-btn" onclick="googleIn()">
         <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Google দিয়ে প্রবেশ করুন
+        গুগল দিয়ে প্রবেশ করুন
       </button>
       <div class="divider"><span>অথবা</span></div>
       <div id="login-f">
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div class="fg"><label class="fl">ইমেইল</label><input type="email" id="l-email" class="fi" placeholder="আপনার ইমেইল"></div>
-          <div class="fg"><label class="fl">পাসওয়ার্ড</label><input type="password" id="l-pass" class="fi" placeholder="পাসওয়ার্ড"></div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div class="fg"><label class="fl">ইমেইল</label><input type="email" id="l-em" class="fi" placeholder="আপনার ইমেইল"></div>
+          <div class="fg"><label class="fl">পাসওয়ার্ড</label><input type="password" id="l-pw" class="fi" placeholder="পাসওয়ার্ড"></div>
           <button class="btn btn-gold" onclick="emailIn()" style="width:100%">লগইন করুন</button>
-          <button onclick="resetPass()" style="background:none;border:none;color:var(--text-3);font-size:.8rem;font-family:'Hind Siliguri',sans-serif">পাসওয়ার্ড ভুলে গেছেন?</button>
+          <button onclick="resetPw()" style="background:none;border:none;color:var(--t3);font-size:.78rem;font-family:'Hind Siliguri',sans-serif">পাসওয়ার্ড ভুলে গেছেন?</button>
         </div>
       </div>
       <div id="reg-f" style="display:none">
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div class="fg"><label class="fl">আপনার নাম</label><input type="text" id="r-name" class="fi" placeholder="পূর্ণ নাম"></div>
-          <div class="fg"><label class="fl">ইমেইল</label><input type="email" id="r-email" class="fi" placeholder="ইমেইল"></div>
-          <div class="fg"><label class="fl">পাসওয়ার্ড</label><input type="password" id="r-pass" class="fi" placeholder="কমপক্ষে ৬ অক্ষর"></div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div class="fg"><label class="fl">আপনার নাম</label><input type="text" id="r-nm" class="fi" placeholder="পূর্ণ নাম"></div>
+          <div class="fg"><label class="fl">ইমেইল</label><input type="email" id="r-em" class="fi" placeholder="ইমেইল"></div>
+          <div class="fg"><label class="fl">পাসওয়ার্ড</label><input type="password" id="r-pw" class="fi" placeholder="কমপক্ষে ৬ অক্ষর"></div>
           <button class="btn btn-gold" onclick="emailReg()" style="width:100%">অ্যাকাউন্ট তৈরি করুন</button>
         </div>
       </div>
-      <p style="text-align:center;margin-top:14px;font-size:.78rem;color:var(--text-3)">অ্যাকাউন্ট ছাড়াও বিনামূল্যে বই পাওয়া যাবে</p>
+      <p style="text-align:center;margin-top:13px;font-size:.76rem;color:var(--t3)">অ্যাকাউন্ট ছাড়াও বিনামূল্যে বই পাওয়া যাবে</p>
     </div>
   </div>
 </div>
 
-<!-- PROFILE -->
+<!-- প্রোফাইল -->
 <div id="page-profile" class="page">
-  <div class="profile-pg">
-    <div class="prof-head">
+  <div class="prof-pg">
+    <div class="prof-hd">
       <div class="prof-av" id="p-av">?</div>
-      <div><div class="prof-name" id="p-name">লোড হচ্ছে...</div><div class="prof-email" id="p-email"></div></div>
+      <div class="prof-info">
+        <div class="prof-name">
+          <span id="p-nm">লোড হচ্ছে...</span>
+          <span id="p-badge"></span>
+        </div>
+        <div class="prof-email" id="p-em"></div>
+        <div class="prof-stats" id="p-stats"></div>
+      </div>
     </div>
-    <div class="ptabs">
-      <button class="ptab2 on" onclick="profTab('orders',this)">📦 আমার অর্ডার</button>
-      <button class="ptab2" onclick="profTab('wish',this)">❤️ উইশলিস্ট</button>
+    <div class="p-tabs">
+      <button class="p-tab on" onclick="profTab('orders',this)">📦 আমার অর্ডার</button>
+      <button class="p-tab" onclick="profTab('wish',this)">❤️ উইশলিস্ট</button>
+      <button class="p-tab" onclick="profTab('reviews',this)">💬 রিভিউ</button>
     </div>
-    <div id="pt-orders" class="ptcontent on"></div>
-    <div id="pt-wish" class="ptcontent"></div>
+    <div id="pt-orders" class="p-tc on"></div>
+    <div id="pt-wish" class="p-tc"></div>
+    <div id="pt-reviews" class="p-tc"></div>
   </div>
 </div>
 
-<!-- ADMIN -->
+<!-- অ্যাডমিন -->
 <div id="page-admin" class="page">
-  <div class="admin-pg">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px">
-      <div><div class="admin-title">⚙️ Admin Panel</div><div style="font-size:.78rem;color:var(--text-3);margin-top:2px">কামরস লাইব্রেরি — সম্পূর্ণ নিয়ন্ত্রণ</div></div>
-      <span style="font-size:.76rem;color:var(--text-3)" id="a-email"></span>
+  <div class="adm-pg">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:9px">
+      <div><div class="adm-title">⚙️ অ্যাডমিন প্যানেল</div><div style="font-size:.76rem;color:var(--t3);margin-top:2px">কামরস লাইব্রেরি — সম্পূর্ণ নিয়ন্ত্রণ</div></div>
+      <span style="font-size:.74rem;color:var(--t3)" id="a-em"></span>
     </div>
-    <div class="anav">
-      <button class="abtn on" onclick="adminTab('dash',this)">📊 ড্যাশবোর্ড</button>
-      <button class="abtn" onclick="adminTab('books',this)">📚 বই ম্যানেজ</button>
-      <button class="abtn" onclick="adminTab('cats',this)">🏷️ ক্যাটাগরি</button>
-      <button class="abtn" onclick="adminTab('orders',this)">📦 অর্ডার</button>
-      <button class="abtn" onclick="adminTab('resell',this)">🤝 রিসেলার</button>
-      <button class="abtn" onclick="adminTab('sets',this)">🔧 সেটিংস</button>
+    <div class="a-nav">
+      <button class="a-nav-btn on" onclick="aTab('dash',this)">📊 ড্যাশবোর্ড</button>
+      <button class="a-nav-btn" onclick="aTab('books',this)">📚 বই</button>
+      <button class="a-nav-btn" onclick="aTab('cats',this)">🏷️ ক্যাটাগরি</button>
+      <button class="a-nav-btn" onclick="aTab('orders',this)">📦 অর্ডার</button>
+      <button class="a-nav-btn" onclick="aTab('resell',this)">🤝 রিসেলার</button>
+      <button class="a-nav-btn" onclick="aTab('coupons',this)">🎟️ কুপন</button>
+      <button class="a-nav-btn" onclick="aTab('sets',this)">🔧 সেটিংস</button>
     </div>
 
-    <!-- Dashboard -->
-    <div id="a-dash" class="asec on">
+    <!-- ড্যাশবোর্ড -->
+    <div id="a-dash" class="a-sec on">
       <div class="stats-row">
-        <div class="scard"><div class="s-label">মোট বই</div><div class="s-val" id="st-books">0</div></div>
-        <div class="scard"><div class="s-label">মোট অর্ডার</div><div class="s-val" id="st-orders">0</div></div>
-        <div class="scard hi"><div class="s-label">Pending</div><div class="s-val" id="st-pend">0</div><div class="s-note">অনুমোদন প্রয়োজন</div></div>
-        <div class="scard"><div class="s-label">মোট আয়</div><div class="s-val" id="st-rev">৳০</div></div>
-        <div class="scard ro"><div class="s-label">রিসেলার</div><div class="s-val" id="st-res">0</div></div>
+        <div class="sc"><div class="s-lbl">মোট বই</div><div class="s-val" id="st-bk">০</div></div>
+        <div class="sc"><div class="s-lbl">মোট অর্ডার</div><div class="s-val" id="st-or">০</div></div>
+        <div class="sc hi"><div class="s-lbl">অপেক্ষমাণ</div><div class="s-val" id="st-pe">০</div><div class="s-sub">অনুমোদন প্রয়োজন</div></div>
+        <div class="sc"><div class="s-lbl">মোট আয়</div><div class="s-val" id="st-rv">৳০</div></div>
+        <div class="sc ro"><div class="s-lbl">রিসেলার</div><div class="s-val" id="st-rs">০</div></div>
+        <div class="sc bl"><div class="s-lbl">ব্যবহারকারী</div><div class="s-val" id="st-us">০</div></div>
       </div>
       <div class="sec-head"><h2 class="sec-title">সাম্প্রতিক <span>অর্ডার</span></h2></div>
-      <div id="recent-ord"></div>
+      <div id="recent-ords"></div>
     </div>
 
-    <!-- Books -->
-    <div id="a-books" class="asec">
+    <!-- বই ম্যানেজ -->
+    <div id="a-books" class="a-sec">
       <div class="af">
-        <div class="af-title" id="bform-title">➕ নতুন বই যোগ করুন</div>
+        <div class="af-title" id="bform-t">➕ নতুন বই যোগ করুন</div>
         <input type="hidden" id="b-id">
         <div class="fg-grid">
           <div class="fg"><label class="fl">বইয়ের নাম *</label><input type="text" id="b-title" class="fi" placeholder="বইয়ের নাম"></div>
           <div class="fg"><label class="fl">লেখক *</label><input type="text" id="b-author" class="fi" placeholder="লেখকের নাম"></div>
           <div class="fg"><label class="fl">ক্যাটাগরি *</label><select id="b-cat" class="fs"><option value="">বেছে নিন</option></select></div>
-          <div class="fg"><label class="fl">মূল্য ৳ (০=ফ্রি) *</label><input type="number" id="b-price" class="fi" placeholder="0" min="0"></div>
-          <div class="fg"><label class="fl">কভার ইমেজ URL *</label><input type="url" id="b-cover" class="fi" placeholder="https://..."></div>
-          <div class="fg"><label class="fl">ডাউনলোড URL *</label><input type="url" id="b-dl" class="fi" placeholder="Google Drive link"></div>
+          <div class="fg"><label class="fl">মূল্য ৳ (০=বিনামূল্যে) *</label><input type="number" id="b-price" class="fi" placeholder="০" min="0"></div>
+          <div class="fg"><label class="fl">ডিসকাউন্ট (%) ঐচ্ছিক</label><input type="number" id="b-disc" class="fi" placeholder="০" min="0" max="100"></div>
           <div class="fg"><label class="fl">ভাষা</label><input type="text" id="b-lang" class="fi" value="বাংলা"></div>
-          <div class="fg"><label class="fl">পেজ সংখ্যা</label><input type="number" id="b-pages" class="fi" placeholder="200"></div>
+          <div class="fg"><label class="fl">পেজ সংখ্যা</label><input type="number" id="b-pages" class="fi" placeholder="২০০"></div>
+          <div class="fg"><label class="fl">কভার ইমেজ URL *</label><input type="url" id="b-cover" class="fi" placeholder="https://..."></div>
+          <div class="fg full"><label class="fl">অতিরিক্ত স্ক্রিনশট URL (একটি করে লাইনে)</label><textarea id="b-shots" class="ft" placeholder="https://screenshot1.jpg&#10;https://screenshot2.jpg" style="min-height:70px"></textarea></div>
+          <div class="fg"><label class="fl">ডাউনলোড URL *</label><input type="url" id="b-dl" class="fi" placeholder="Google Drive link"></div>
           <div class="fg full"><label class="fl">বিবরণ *</label><textarea id="b-desc" class="ft" placeholder="বইটির সম্পর্কে বিস্তারিত..."></textarea></div>
-          <div class="fg"><label class="fl">ট্যাগ (comma দিয়ে)</label><input type="text" id="b-tags" class="fi" placeholder="দাম্পত্য, স্বাস্থ্য"></div>
+          <div class="fg"><label class="fl">ট্যাগ (কমা দিয়ে)</label><input type="text" id="b-tags" class="fi" placeholder="দাম্পত্য, স্বাস্থ্য"></div>
           <div class="fg" style="display:flex;flex-direction:column;gap:10px;justify-content:flex-end">
-            <div class="chk-row"><input type="checkbox" id="b-feat"><label for="b-feat">Featured বই</label></div>
-            <div class="chk-row"><input type="checkbox" id="b-res"><label for="b-res">রিসেলারদের জন্য</label></div>
+            <div class="chk"><input type="checkbox" id="b-feat"><label for="b-feat">বিশেষ (Featured) বই</label></div>
+            <div class="chk"><input type="checkbox" id="b-res"><label for="b-res">রিসেলারদের জন্য বিশেষ</label></div>
           </div>
         </div>
-        <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+        <div style="display:flex;gap:9px;margin-top:16px;flex-wrap:wrap">
           <button class="btn btn-gold" onclick="saveBook()">💾 বই সেভ করুন</button>
-          <button class="btn btn-ghost" id="b-cancel" style="display:none" onclick="cancelBEdit()">বাতিল</button>
+          <button class="btn btn-ghost" id="b-cancel" style="display:none" onclick="clearBForm()">বাতিল</button>
         </div>
       </div>
-      <div class="sec-head"><h2 class="sec-title">📋 বই <span>তালিকা</span></h2><span id="a-bcnt" style="color:var(--text-3);font-size:.83rem"></span></div>
-      <div style="overflow-x:auto;background:var(--card);border:1px solid var(--border);border-radius:var(--r)">
-        <table class="at"><thead><tr><th>কভার</th><th>নাম</th><th>লেখক</th><th>ক্যাটাগরি</th><th>মূল্য</th><th>★</th><th>অ্যাকশন</th></tr></thead><tbody id="b-tbody"></tbody></table>
+      <div class="sec-head"><h2 class="sec-title">📋 বই <span>তালিকা</span></h2><span id="a-bcnt" style="color:var(--t3);font-size:.82rem"></span></div>
+      <div style="overflow-x:auto;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r)">
+        <table class="at"><thead><tr><th>কভার</th><th>নাম</th><th>লেখক</th><th>ক্যাটাগরি</th><th>মূল্য</th><th>ছাড়</th><th>★</th><th>অ্যাকশন</th></tr></thead><tbody id="b-tbody"></tbody></table>
       </div>
     </div>
 
-    <!-- Categories -->
-    <div id="a-cats" class="asec">
+    <!-- ক্যাটাগরি -->
+    <div id="a-cats" class="a-sec">
       <div class="af">
         <div class="af-title">🏷️ নতুন ক্যাটাগরি যোগ করুন</div>
-        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
-          <div class="fg" style="flex:1;min-width:180px"><label class="fl">ক্যাটাগরির নাম *</label><input type="text" id="c-name" class="fi" placeholder="যেমন: দাম্পত্য জীবন"></div>
-          <div class="fg" style="flex:1;min-width:130px"><label class="fl">ইমোজি (ঐচ্ছিক)</label><input type="text" id="c-emoji" class="fi" placeholder="💑"></div>
+        <div style="display:flex;gap:9px;align-items:flex-end;flex-wrap:wrap">
+          <div class="fg" style="flex:1;min-width:170px"><label class="fl">ক্যাটাগরির নাম *</label><input type="text" id="c-name" class="fi" placeholder="যেমন: দাম্পত্য জীবন"></div>
+          <div class="fg" style="flex:1;min-width:120px"><label class="fl">ইমোজি (ঐচ্ছিক)</label><input type="text" id="c-emoji" class="fi" placeholder="💑"></div>
           <button class="btn btn-gold" onclick="addCat()">➕ যোগ করুন</button>
         </div>
       </div>
@@ -715,54 +639,74 @@ footer{margin-top:60px;padding:40px 20px 28px;border-top:1px solid var(--border)
       <div id="cat-list"></div>
     </div>
 
-    <!-- Orders -->
-    <div id="a-orders" class="asec">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
-        <button class="pill on" onclick="aordFilter('all',this)">সব</button>
-        <button class="pill" onclick="aordFilter('pending',this)">🟡 Pending</button>
-        <button class="pill" onclick="aordFilter('approved',this)">✅ Approved</button>
-        <button class="pill" onclick="aordFilter('rejected',this)">❌ Rejected</button>
+    <!-- অর্ডার -->
+    <div id="a-orders" class="a-sec">
+      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="pill on" onclick="aOrdF('all',this)">সব</button>
+        <button class="pill" onclick="aOrdF('pending',this)">🟡 অপেক্ষমাণ</button>
+        <button class="pill" onclick="aOrdF('approved',this)">✅ অনুমোদিত</button>
+        <button class="pill" onclick="aOrdF('rejected',this)">❌ প্রত্যাখ্যাত</button>
       </div>
       <div id="a-ord-list"></div>
     </div>
 
-    <!-- Resellers -->
-    <div id="a-resell" class="asec">
+    <!-- রিসেলার -->
+    <div id="a-resell" class="a-sec">
       <div class="af">
-        <div class="af-title">🤝 নতুন রিসেলার যোগ করুন</div>
+        <div class="af-title">🤝 রিসেলার যোগ / সম্পাদনা করুন</div>
+        <input type="hidden" id="rs-id">
         <div class="fg-grid">
-          <div class="fg"><label class="fl">নাম *</label><input type="text" id="rs-name" class="fi" placeholder="রিসেলারের নাম"></div>
-          <div class="fg"><label class="fl">ইমেইল *</label><input type="email" id="rs-email" class="fi" placeholder="ইমেইল"></div>
-          <div class="fg"><label class="fl">ফোন</label><input type="text" id="rs-phone" class="fi" placeholder="01XXXXXXXXX"></div>
-          <div class="fg"><label class="fl">কমিশন (%) *</label><input type="number" id="rs-com" class="fi" placeholder="20" min="0" max="100"></div>
+          <div class="fg"><label class="fl">নাম *</label><input type="text" id="rs-nm" class="fi" placeholder="রিসেলারের নাম"></div>
+          <div class="fg"><label class="fl">ইমেইল *</label><input type="email" id="rs-em" class="fi" placeholder="ইমেইল"></div>
+          <div class="fg"><label class="fl">ফোন নম্বর</label><input type="text" id="rs-ph" class="fi" placeholder="০১XXXXXXXXX"></div>
+          <div class="fg"><label class="fl">কমিশন (%) *</label><input type="number" id="rs-com" class="fi" placeholder="২০" min="0" max="100"></div>
           <div class="fg full"><label class="fl">নোট</label><input type="text" id="rs-note" class="fi" placeholder="যেকোনো তথ্য..."></div>
         </div>
-        <button class="btn btn-rose" onclick="addReseller()" style="margin-top:14px">🤝 রিসেলার যোগ করুন</button>
+        <div style="display:flex;gap:9px;margin-top:13px;flex-wrap:wrap">
+          <button class="btn btn-rose" id="rs-save-btn" onclick="saveReseller()">🤝 রিসেলার সেভ করুন</button>
+          <button class="btn btn-ghost" id="rs-cancel" style="display:none" onclick="clearRsForm()">বাতিল</button>
+        </div>
       </div>
-      <div class="sec-head"><h2 class="sec-title">🤝 রিসেলার <span>তালিকা</span></h2><span id="res-cnt" style="color:var(--text-3);font-size:.83rem"></span></div>
-      <div id="res-list"></div>
+      <div class="sec-head"><h2 class="sec-title">🤝 রিসেলার <span>তালিকা</span></h2><span id="rs-cnt" style="color:var(--t3);font-size:.82rem"></span></div>
+      <div id="rs-list"></div>
     </div>
 
-    <!-- Settings -->
-    <div id="a-sets" class="asec">
+    <!-- কুপন -->
+    <div id="a-coupons" class="a-sec">
+      <div class="af">
+        <div class="af-title">🎟️ নতুন কুপন তৈরি করুন</div>
+        <div class="fg-grid">
+          <div class="fg"><label class="fl">কুপন কোড *</label><input type="text" id="cp-code" class="fi" placeholder="যেমন: KAMROS20" style="text-transform:uppercase"></div>
+          <div class="fg"><label class="fl">ধরন</label><select id="cp-type" class="fs"><option value="percent">শতাংশ (%)</option><option value="flat">নির্দিষ্ট পরিমাণ (৳)</option></select></div>
+          <div class="fg"><label class="fl">ছাড়ের পরিমাণ *</label><input type="number" id="cp-val" class="fi" placeholder="২০" min="1"></div>
+          <div class="fg"><label class="fl">সর্বোচ্চ ব্যবহার (০=সীমাহীন)</label><input type="number" id="cp-max" class="fi" placeholder="০" min="0"></div>
+          <div class="fg full"><label class="fl">বিবরণ</label><input type="text" id="cp-desc" class="fi" placeholder="কুপনের বিবরণ"></div>
+        </div>
+        <button class="btn btn-gold" onclick="saveCoupon()" style="margin-top:13px">🎟️ কুপন তৈরি করুন</button>
+      </div>
+      <div class="sec-head"><h2 class="sec-title">🎟️ কুপন <span>তালিকা</span></h2></div>
+      <div id="cp-list"></div>
+    </div>
+
+    <!-- সেটিংস -->
+    <div id="a-sets" class="a-sec">
       <div class="af">
         <div class="af-title">💳 পেমেন্ট নম্বর</div>
         <div class="fg-grid">
-          <div class="fg"><label class="fl">বিকাশ</label><input type="text" id="s-bkash" class="fi" placeholder="01XXXXXXXXX"></div>
-          <div class="fg"><label class="fl">নগদ</label><input type="text" id="s-nagad" class="fi" placeholder="01XXXXXXXXX"></div>
-          <div class="fg"><label class="fl">রকেট</label><input type="text" id="s-rocket" class="fi" placeholder="01XXXXXXXXX"></div>
-          <div class="fg"><label class="fl">উপায়</label><input type="text" id="s-upay" class="fi" placeholder="01XXXXXXXXX"></div>
+          <div class="fg"><label class="fl">বিকাশ নম্বর</label><input type="text" id="s-bkash" class="fi" placeholder="০১XXXXXXXXX"></div>
+          <div class="fg"><label class="fl">নগদ নম্বর</label><input type="text" id="s-nagad" class="fi" placeholder="০১XXXXXXXXX"></div>
+          <div class="fg"><label class="fl">রকেট নম্বর</label><input type="text" id="s-rocket" class="fi" placeholder="০১XXXXXXXXX"></div>
+          <div class="fg"><label class="fl">উপায় নম্বর</label><input type="text" id="s-upay" class="fi" placeholder="০১XXXXXXXXX"></div>
           <div class="fg full"><label class="fl">সাইটের ট্যাগলাইন</label><input type="text" id="s-tag" class="fi" placeholder="জ্ঞানেই সুখী দাম্পত্য"></div>
         </div>
-        <button class="btn btn-gold" onclick="saveSets()" style="margin-top:14px">💾 সেটিংস সেভ করুন</button>
+        <button class="btn btn-gold" onclick="saveSets()" style="margin-top:13px">💾 সেটিংস সেভ করুন</button>
       </div>
     </div>
   </div>
 </div>
-
 </main>
 
-<!-- FOOTER -->
+<!-- ফুটার -->
 <footer id="site-footer" style="display:none">
   <div class="foot-grid">
     <div>
@@ -770,7 +714,7 @@ footer{margin-top:60px;padding:40px 20px 28px;border-top:1px solid var(--border)
       <p class="foot-desc">দাম্পত্য জীবন, স্বাস্থ্য ও সম্পর্ক বিষয়ক প্রিমিয়াম বাংলা ইবুক। শুধুমাত্র প্রাপ্তবয়স্কদের জন্য।</p>
     </div>
     <div>
-      <div class="foot-ht">পেজ</div>
+      <div class="foot-ht">পেজসমূহ</div>
       <div class="foot-links">
         <a href="#" onclick="showPage('home')">হোম</a>
         <button onclick="showPage('auth')">লগইন / রেজিস্ট্রেশন</button>
@@ -784,73 +728,45 @@ footer{margin-top:60px;padding:40px 20px 28px;border-top:1px solid var(--border)
     </div>
   </div>
   <div class="foot-btm">
-    <span class="foot-copy">© 2024 কামরস লাইব্রেরি। সর্বস্বত্ব সংরক্ষিত।</span>
-    <span class="badge18">🔞 18+ Only</span>
+    <span class="foot-copy">© ২০২৪ কামরস লাইব্রেরি। সর্বস্বত্ব সংরক্ষিত।</span>
+    <span class="b18">🔞 শুধুমাত্র প্রাপ্তবয়স্কদের জন্য</span>
   </div>
 </footer>
 
-<!-- MODALS -->
-<div class="overlay" id="pay-modal">
-  <div class="modal">
-    <div class="m-head"><h3 class="m-title" id="pay-m-title">বই কিনুন</h3><button class="m-close" onclick="closeM('pay-modal')">✕</button></div>
-    <div class="m-body" id="pay-m-body"></div>
-  </div>
-</div>
-
-<div class="overlay" id="reject-modal">
-  <div class="modal" style="max-width:400px">
-    <div class="m-head"><h3 class="m-title">অর্ডার প্রত্যাখ্যান</h3><button class="m-close" onclick="closeM('reject-modal')">✕</button></div>
-    <div class="m-body">
-      <div class="fg"><label class="fl">কারণ</label><textarea id="rej-reason" class="ft" placeholder="কারণ লিখুন..."></textarea></div>
-      <input type="hidden" id="rej-id">
-      <div style="display:flex;gap:8px;margin-top:14px">
-        <button class="btn btn-err" onclick="doReject()">প্রত্যাখ্যান করুন</button>
-        <button class="btn btn-ghost" onclick="closeM('reject-modal')">বাতিল</button>
-      </div>
+<!-- মডালসমূহ -->
+<div class="ov" id="pay-modal"><div class="modal"><div class="m-hd"><h3 class="m-title" id="pay-m-t">বই কিনুন</h3><button class="m-close" onclick="closeM('pay-modal')">✕</button></div><div class="m-body" id="pay-m-b"></div></div></div>
+<div class="ov" id="rej-modal"><div class="modal" style="max-width:390px"><div class="m-hd"><h3 class="m-title">অর্ডার প্রত্যাখ্যান</h3><button class="m-close" onclick="closeM('rej-modal')">✕</button></div><div class="m-body"><div class="fg"><label class="fl">প্রত্যাখ্যানের কারণ</label><textarea id="rej-rsn" class="ft" placeholder="কারণ লিখুন..."></textarea></div><input type="hidden" id="rej-id"><div style="display:flex;gap:8px;margin-top:13px"><button class="btn btn-err" onclick="doReject()">প্রত্যাখ্যান করুন</button><button class="btn btn-ghost" onclick="closeM('rej-modal')">বাতিল</button></div></div></div></div>
+<div class="ov" id="edit-bk-modal"><div class="modal" style="max-width:620px"><div class="m-hd"><h3 class="m-title">✏️ বই সম্পাদনা</h3><button class="m-close" onclick="closeM('edit-bk-modal')">✕</button></div><div class="m-body">
+  <div class="fg-grid">
+    <div class="fg"><label class="fl">নাম</label><input type="text" id="eb-t" class="fi"></div>
+    <div class="fg"><label class="fl">লেখক</label><input type="text" id="eb-a" class="fi"></div>
+    <div class="fg"><label class="fl">ক্যাটাগরি</label><select id="eb-c" class="fs"></select></div>
+    <div class="fg"><label class="fl">মূল্য</label><input type="number" id="eb-p" class="fi" min="0"></div>
+    <div class="fg"><label class="fl">ডিসকাউন্ট (%)</label><input type="number" id="eb-d" class="fi" min="0" max="100"></div>
+    <div class="fg"><label class="fl">ভাষা</label><input type="text" id="eb-l" class="fi"></div>
+    <div class="fg"><label class="fl">পেজ</label><input type="number" id="eb-pg" class="fi"></div>
+    <div class="fg"><label class="fl">কভার URL</label><input type="url" id="eb-cv" class="fi"></div>
+    <div class="fg full"><label class="fl">অতিরিক্ত স্ক্রিনশট URL (একটি করে লাইনে)</label><textarea id="eb-sh" class="ft" style="min-height:60px"></textarea></div>
+    <div class="fg"><label class="fl">ডাউনলোড URL</label><input type="url" id="eb-dl" class="fi"></div>
+    <div class="fg full"><label class="fl">বিবরণ</label><textarea id="eb-de" class="ft"></textarea></div>
+    <div class="fg full"><label class="fl">ট্যাগ</label><input type="text" id="eb-tg" class="fi"></div>
+    <div class="fg full" style="display:flex;gap:16px;flex-wrap:wrap">
+      <div class="chk"><input type="checkbox" id="eb-ft"><label for="eb-ft">বিশেষ বই</label></div>
+      <div class="chk"><input type="checkbox" id="eb-rs"><label for="eb-rs">রিসেলারদের জন্য</label></div>
     </div>
   </div>
-</div>
+  <input type="hidden" id="eb-id">
+  <div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-gold" onclick="updateBook()">💾 আপডেট করুন</button><button class="btn btn-ghost" onclick="closeM('edit-bk-modal')">বাতিল</button></div>
+</div></div></div>
+<div class="ov" id="img-modal" onclick="this.classList.remove('on')"><img id="img-m" src="" alt="" style="max-width:92vw;max-height:92vh;border-radius:8px"></div>
+<div class="ov" id="confirm-modal"><div class="confirm-box"><span class="confirm-icon" id="cf-icon">❓</span><div class="confirm-title" id="cf-title">নিশ্চিত করুন</div><div class="confirm-msg" id="cf-msg">আপনি কি নিশ্চিত?</div><div class="confirm-btns"><button class="btn btn-err" id="cf-ok">হ্যাঁ</button><button class="btn btn-ghost" onclick="closeM('confirm-modal')">না, বাতিল করুন</button></div></div></div>
+<div id="toast-box"></div>
 
-<div class="overlay" id="edit-book-modal">
-  <div class="modal" style="max-width:640px">
-    <div class="m-head"><h3 class="m-title">✏️ বই এডিট</h3><button class="m-close" onclick="closeM('edit-book-modal')">✕</button></div>
-    <div class="m-body">
-      <div class="fg-grid">
-        <div class="fg"><label class="fl">নাম</label><input type="text" id="eb-title" class="fi"></div>
-        <div class="fg"><label class="fl">লেখক</label><input type="text" id="eb-author" class="fi"></div>
-        <div class="fg"><label class="fl">ক্যাটাগরি</label><select id="eb-cat" class="fs"></select></div>
-        <div class="fg"><label class="fl">মূল্য</label><input type="number" id="eb-price" class="fi" min="0"></div>
-        <div class="fg"><label class="fl">কভার URL</label><input type="url" id="eb-cover" class="fi"></div>
-        <div class="fg"><label class="fl">ডাউনলোড URL</label><input type="url" id="eb-dl" class="fi"></div>
-        <div class="fg"><label class="fl">ভাষা</label><input type="text" id="eb-lang" class="fi"></div>
-        <div class="fg"><label class="fl">পেজ</label><input type="number" id="eb-pages" class="fi"></div>
-        <div class="fg full"><label class="fl">বিবরণ</label><textarea id="eb-desc" class="ft"></textarea></div>
-        <div class="fg full"><label class="fl">ট্যাগ</label><input type="text" id="eb-tags" class="fi"></div>
-        <div class="fg full" style="display:flex;gap:18px;flex-wrap:wrap">
-          <div class="chk-row"><input type="checkbox" id="eb-feat"><label for="eb-feat">Featured</label></div>
-          <div class="chk-row"><input type="checkbox" id="eb-res"><label for="eb-res">রিসেলারদের জন্য</label></div>
-        </div>
-      </div>
-      <input type="hidden" id="eb-id">
-      <div style="display:flex;gap:8px;margin-top:18px">
-        <button class="btn btn-gold" onclick="updateBook()">💾 আপডেট</button>
-        <button class="btn btn-ghost" onclick="closeM('edit-book-modal')">বাতিল</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="overlay" id="img-modal" onclick="this.classList.remove('on')">
-  <img id="img-m-src" src="" alt="" style="max-width:90vw;max-height:90vh;border-radius:8px">
-</div>
-
-<div id="toast-wrap"></div>
-
-<!-- ══ JS ══ -->
+<!-- ══ জাভাস্ক্রিপ্ট ══ -->
 <script>
-// ═══════════════════════════════════
-// CONFIG
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// কনফিগারেশন
+// ════════════════════════════════════
 firebase.initializeApp({
   apiKey:"AIzaSyC0itBrHKOmH-GSd7nhz5cNEcs9e12Qb4g",
   authDomain:"kamros-c6aa4.firebaseapp.com",
@@ -866,317 +782,375 @@ const EJS_SID="service_7792zbc", EJS_TID="template_xnc4nuo";
 const IMGBB="13174a9b87a8e7eefa10bc67aa029399";
 const ADMIN="kamroslibrary@gmail.com";
 
-// ═══════════════════════════════════
-// STATE
-// ═══════════════════════════════════
-let me=null, books={}, orders={}, cats={}, resellers={}, sets={};
+// ════════ অবস্থা ════════
+let me=null, books={}, orders={}, cats={}, resellers={}, settings={}, coupons={}, users={};
 let catFilter='all', aOrdFilter='all', upUrl='', payMeth='bkash', curBook=null, selStar=0;
+let appliedCoupon=null, finalPrice=0;
 
-// ═══════════════════════════════════
-// AGE GATE
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// বয়স যাচাই
+// ════════════════════════════════════
 function enterSite(){
-  sessionStorage.setItem('kml-age','1');
+  sessionStorage.setItem('kml','1');
   document.getElementById('age-gate').style.display='none';
-  ['site-header','site-main','site-footer'].forEach(id=>document.getElementById(id).style.display='');
-  document.getElementById('site-header').style.display='block';
+  document.getElementById('site-hdr').style.display='block';
   document.getElementById('site-main').style.display='block';
   document.getElementById('site-footer').style.display='block';
 }
 
-// ═══════════════════════════════════
-// INIT
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// শুরু
+// ════════════════════════════════════
 document.addEventListener('DOMContentLoaded',()=>{
-  if(sessionStorage.getItem('kml-age')) enterSite();
-
-  // restore theme
-  const t=localStorage.getItem('kml-theme');
+  if(sessionStorage.getItem('kml')) enterSite();
+  const t=localStorage.getItem('kml-th');
   if(t){document.documentElement.setAttribute('data-theme',t);document.getElementById('theme-btn').textContent=t==='light'?'☀️':'🌙';}
-
-  // load data
-  db.ref('settings').on('value',s=>{sets=s.val()||{}});
-  db.ref('orders').on('value',s=>{orders=s.val()||{}});
-  db.ref('categories').on('value',s=>{
-    cats=s.val()||{};
-    buildPills(); updateCatSelects(); renderCatAdmin();
-  });
-  db.ref('resellers').on('value',s=>{resellers=s.val()||{}; renderResellers();});
-  db.ref('books').on('value',s=>{
-    books=s.val()||{};
-    renderBooks(); renderFeat(); updateBTable(); updateStats();
-  });
+  db.ref('settings').on('value',s=>{settings=s.val()||{};});
+  db.ref('orders').on('value',s=>{orders=s.val()||{};});
+  db.ref('categories').on('value',s=>{cats=s.val()||{};buildPills();updateCatSels();renderCatList();});
+  db.ref('resellers').on('value',s=>{resellers=s.val()||{};renderRsList();});
+  db.ref('coupons').on('value',s=>{coupons=s.val()||{};renderCpList();});
+  db.ref('users').on('value',s=>{users=s.val()||{};const el=document.getElementById('st-us');if(el)el.textContent=Object.keys(users).length;});
+  db.ref('books').on('value',s=>{books=s.val()||{};renderBooks();renderFeat();updateBTable();updateStats();});
 });
 
-// ═══════════════════════════════════
-// AUTH
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// অথেন্টিকেশন
+// ════════════════════════════════════
 auth.onAuthStateChanged(u=>{
-  me=u; navUI();
-  if(u) db.ref('users/'+u.uid).once('value').then(s=>{
-    if(!s.exists()) db.ref('users/'+u.uid).set({name:u.displayName||'',email:u.email,joinedAt:Date.now()});
-  });
-});
-
-function navUI(){
-  const u=me, ia=u&&u.email===ADMIN;
-  document.getElementById('nl-profile').style.display=u?'list-item':'none';
-  document.getElementById('nl-logout').style.display=u?'list-item':'none';
-  document.getElementById('nl-login').style.display=u?'none':'list-item';
-  document.getElementById('nl-admin').style.display=ia?'list-item':'none';
-  document.getElementById('mn-profile').style.display=u?'block':'none';
-  document.getElementById('mn-logout').style.display=u?'block':'none';
-  document.getElementById('mn-login').style.display=u?'none':'block';
-  document.getElementById('mn-admin').style.display=ia?'block':'none';
+  me=u; updateNav();
   if(u){
     const n=u.displayName||u.email.split('@')[0];
-    document.getElementById('p-name').textContent=n;
-    document.getElementById('p-email').textContent=u.email;
+    document.getElementById('p-nm').textContent=n;
+    document.getElementById('p-em').textContent=u.email;
     document.getElementById('p-av').textContent=n[0].toUpperCase();
+    // সেভ ইউজার
+    db.ref('users/'+u.uid).once('value').then(s=>{
+      if(!s.exists()) db.ref('users/'+u.uid).set({name:n,email:u.email,joinedAt:Date.now(),orders:0,reviews:0});
+    });
+    updateUserBadge(u);
   }
+});
+
+function updateUserBadge(u){
+  // ব্যাজ নির্ধারণ
+  const isAdmin=u.email===ADMIN;
+  const isReseller=Object.values(resellers).some(r=>r.email===u.email);
+  const ud=users[u.uid]||{};
+  const ordCount=ud.orders||0;
+  let badge='';
+  if(isAdmin) badge='<span class="badge badge-admin">👑 অ্যাডমিন</span>';
+  else if(isReseller) badge='<span class="badge badge-reseller">🤝 রিসেলার</span>';
+  else if(ordCount>=10) badge='<span class="badge badge-vip">💎 ভিআইপি পাঠক</span>';
+  else if(ordCount>=3) badge='<span class="badge badge-regular">📘 নিয়মিত পাঠক</span>';
+  else badge='<span class="badge badge-new">📗 নতুন পাঠক</span>';
+  const el=document.getElementById('p-badge');
+  if(el) el.innerHTML=badge;
+}
+
+function updateNav(){
+  const u=me, ia=u&&u.email===ADMIN;
+  const show=(id,v)=>{const el=document.getElementById(id);if(el)el.style.display=v;};
+  show('nl-profile',u?'list-item':'none');show('nl-logout',u?'list-item':'none');show('nl-login',u?'none':'list-item');show('nl-admin',ia?'list-item':'none');
+  show('mn-profile',u?'block':'none');show('mn-logout',u?'block':'none');show('mn-login',u?'none':'block');show('mn-admin',ia?'block':'none');
 }
 
 function googleIn(){
-  auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-    .then(()=>{toast('স্বাগতম!','ok');showPage('home');}).catch(e=>toast(e.message,'err'));
+  auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(()=>{toast('স্বাগতম!','ok');showPage('home');}).catch(e=>toast(e.message,'err'));
 }
 function emailIn(){
-  const e=document.getElementById('l-email').value, p=document.getElementById('l-pass').value;
+  const e=v('l-em'),p=v('l-pw');
   if(!e||!p) return toast('ইমেইল ও পাসওয়ার্ড দিন','err');
   auth.signInWithEmailAndPassword(e,p).then(()=>{toast('লগইন সফল!','ok');showPage('home');}).catch(e=>toast(e.message,'err'));
 }
 function emailReg(){
-  const n=document.getElementById('r-name').value, e=document.getElementById('r-email').value, p=document.getElementById('r-pass').value;
+  const n=v('r-nm'),e=v('r-em'),p=v('r-pw');
   if(!n||!e||!p) return toast('সব তথ্য পূরণ করুন','err');
   if(p.length<6) return toast('পাসওয়ার্ড কমপক্ষে ৬ অক্ষর','err');
   auth.createUserWithEmailAndPassword(e,p).then(r=>r.user.updateProfile({displayName:n})).then(()=>{toast('অ্যাকাউন্ট তৈরি!','ok');showPage('home');}).catch(e=>toast(e.message,'err'));
 }
-function resetPass(){
-  const e=document.getElementById('l-email').value;
+function resetPw(){
+  const e=v('l-em');
   if(!e) return toast('ইমেইল লিখুন','err');
   auth.sendPasswordResetEmail(e).then(()=>toast('রিসেট ইমেইল পাঠানো হয়েছে','info')).catch(e=>toast(e.message,'err'));
 }
-function doLogout(){auth.signOut().then(()=>{toast('লগআউট সফল','info');showPage('home');});}
+function confirmLogout(){
+  showConfirm('🚪','লগআউট করবেন?','আপনি কি সত্যিই লগআউট করতে চান?',()=>{
+    auth.signOut().then(()=>{toast('লগআউট সফল','info');showPage('home');});
+  });
+}
 function authTab(t,b){
-  document.querySelectorAll('.atab').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  document.querySelectorAll('.a-tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');
   document.getElementById('login-f').style.display=t==='login'?'block':'none';
   document.getElementById('reg-f').style.display=t==='reg'?'block':'none';
 }
 
-// ═══════════════════════════════════
-// NAV
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// নেভিগেশন
+// ════════════════════════════════════
 function showPage(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+n).classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById('page-'+n).classList.add('on');
   window.scrollTo(0,0);
-  document.getElementById('mob-nav').classList.remove('open');
+  document.getElementById('mob-nav').classList.remove('on');
   if(n==='profile') loadProfile();
   if(n==='admin') loadAdmin();
 }
 function toggleTheme(){
-  const h=document.documentElement, d=h.getAttribute('data-theme')==='dark';
+  const h=document.documentElement,d=h.getAttribute('data-theme')==='dark';
   h.setAttribute('data-theme',d?'light':'dark');
   document.getElementById('theme-btn').textContent=d?'☀️':'🌙';
-  localStorage.setItem('kml-theme',d?'light':'dark');
+  localStorage.setItem('kml-th',d?'light':'dark');
 }
-function toggleMob(){document.getElementById('mob-nav').classList.toggle('open');}
+function toggleMob(){document.getElementById('mob-nav').classList.toggle('on');}
 
-// ═══════════════════════════════════
-// CATEGORIES
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// কনফার্ম ডায়ালগ
+// ════════════════════════════════════
+function showConfirm(icon,title,msg,onOk){
+  document.getElementById('cf-icon').textContent=icon;
+  document.getElementById('cf-title').textContent=title;
+  document.getElementById('cf-msg').textContent=msg;
+  document.getElementById('cf-ok').onclick=()=>{closeM('confirm-modal');onOk();};
+  document.getElementById('confirm-modal').classList.add('on');
+}
+
+// ════════════════════════════════════
+// ক্যাটাগরি
+// ════════════════════════════════════
 function buildPills(){
-  const el=document.getElementById('pills'); if(!el) return;
+  const el=document.getElementById('pills');if(!el)return;
   let h=`<button class="pill ${catFilter==='all'?'on':''}" onclick="filterCat('all',this)">সব</button>
           <button class="pill ${catFilter==='free'?'on':''}" onclick="filterCat('free',this)">🎁 বিনামূল্যে</button>`;
-  Object.values(cats).forEach(c=>{
-    h+=`<button class="pill ${catFilter===c.name?'on':''}" onclick="filterCat('${c.name}',this)">${c.emoji||''} ${c.name}</button>`;
-  });
+  Object.values(cats).forEach(c=>{h+=`<button class="pill ${catFilter===c.name?'on':''}" onclick="filterCat('${c.name}',this)">${c.emoji||''} ${c.name}</button>`;});
   el.innerHTML=h;
 }
-
-function updateCatSelects(){
+function updateCatSels(){
   const opts='<option value="">বেছে নিন</option>'+Object.values(cats).map(c=>`<option>${c.emoji?c.emoji+' ':''}${c.name}</option>`).join('');
-  ['b-cat','eb-cat'].forEach(id=>{const el=document.getElementById(id); if(el) el.innerHTML=opts;});
+  ['b-cat','eb-c'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=opts;});
 }
-
 function addCat(){
-  const name=document.getElementById('c-name').value.trim();
-  const emoji=document.getElementById('c-emoji').value.trim();
-  if(!name) return toast('ক্যাটাগরির নাম দিন','err');
-  db.ref('categories').push({name,emoji,createdAt:Date.now()}).then(()=>{
-    toast('ক্যাটাগরি যোগ হয়েছে ✅','ok');
-    document.getElementById('c-name').value='';
-    document.getElementById('c-emoji').value='';
-  }).catch(e=>toast('ব্যর্থ: '+e.message,'err'));
+  const n=v('c-name'),e=v('c-emoji');
+  if(!n)return toast('ক্যাটাগরির নাম দিন','err');
+  db.ref('categories').push({name:n,emoji:e,createdAt:Date.now()}).then(()=>{toast('ক্যাটাগরি যোগ হয়েছে ✅','ok');set('c-name','');set('c-emoji','');}).catch(e=>toast(e.message,'err'));
 }
-
 function delCat(id){
-  if(!confirm('এই ক্যাটাগরি মুছবেন?')) return;
-  db.ref('categories/'+id).remove().then(()=>toast('মুছে ফেলা হয়েছে','info')).catch(e=>toast(e.message,'err'));
+  showConfirm('🗑️','ক্যাটাগরি মুছবেন?','এই ক্যাটাগরি মুছে ফেলা হবে।',()=>{
+    db.ref('categories/'+id).remove().then(()=>toast('মুছে ফেলা হয়েছে','info'));
+  });
 }
-
-function renderCatAdmin(){
-  const el=document.getElementById('cat-list'); if(!el) return;
+function renderCatList(){
+  const el=document.getElementById('cat-list');if(!el)return;
   const items=Object.entries(cats);
-  if(!items.length){el.innerHTML='<div class="empty"><div class="empty-ico">🏷️</div><div class="empty-t">কোনো ক্যাটাগরি নেই</div></div>';return;}
-  el.innerHTML=items.map(([id,c])=>`
-    <div class="cat-item">
-      <div class="cat-name">${c.emoji||''} ${c.name}</div>
-      <button class="btn btn-err btn-sm" onclick="delCat('${id}')">🗑️ মুছুন</button>
-    </div>`).join('');
+  if(!items.length){el.innerHTML='<div class="empty-st"><span class="ei">🏷️</span><div class="et">কোনো ক্যাটাগরি নেই</div></div>';return;}
+  el.innerHTML=items.map(([id,c])=>`<div class="cat-item"><div class="cat-nm">${c.emoji||''} ${c.name}</div><button class="btn btn-err btn-sm" onclick="delCat('${id}')">🗑️ মুছুন</button></div>`).join('');
 }
-
 function filterCat(c,b){
   catFilter=c;
   document.querySelectorAll('#pills .pill').forEach(p=>p.classList.remove('on'));
-  if(b) b.classList.add('on');
+  if(b)b.classList.add('on');
   const t=c==='all'?'সকল <span>বই</span>':c==='free'?'বিনামূল্যে <span>বই</span>':`${c} <span>বই</span>`;
-  const el=document.getElementById('grid-title'); if(el) el.innerHTML=t;
+  const el=document.getElementById('grid-title');if(el)el.innerHTML=t;
   renderBooks();
 }
 
-// ═══════════════════════════════════
-// BOOKS
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// বই
+// ════════════════════════════════════
+function calcFinalPrice(b){
+  const disc=b.discount||0;
+  if(!disc) return b.price;
+  return Math.round(b.price*(1-disc/100));
+}
+
 function renderBooks(){
-  const el=document.getElementById('book-grid'); if(!el) return;
+  const el=document.getElementById('book-grid');if(!el)return;
   let list=Object.entries(books);
-  const q=(document.getElementById('search-inp')?.value||'').trim().toLowerCase();
-  if(q) list=list.filter(([,b])=>b.title?.toLowerCase().includes(q)||b.author?.toLowerCase().includes(q)||(b.tags||[]).some(t=>t.toLowerCase().includes(q)));
-  if(catFilter==='free') list=list.filter(([,b])=>!b.price||b.price===0);
-  else if(catFilter!=='all') list=list.filter(([,b])=>b.category&&b.category.includes(catFilter));
-  const cnt=document.getElementById('book-cnt'); if(cnt) cnt.textContent=list.length+'টি বই';
-  if(!list.length){el.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="empty-ico">📭</div><div class="empty-t">কোনো বই পাওয়া যায়নি</div><div class="empty-d">অন্য ক্যাটাগরি বা কীওয়ার্ড দিয়ে চেষ্টা করুন</div></div>';return;}
+  const q=(document.getElementById('srch')?.value||'').trim().toLowerCase();
+  if(q)list=list.filter(([,b])=>b.title?.toLowerCase().includes(q)||b.author?.toLowerCase().includes(q)||(b.tags||[]).some(t=>t.toLowerCase().includes(q)));
+  if(catFilter==='free')list=list.filter(([,b])=>!b.price||b.price===0);
+  else if(catFilter!=='all')list=list.filter(([,b])=>b.category&&b.category.includes(catFilter));
+  const cnt=document.getElementById('bcnt');if(cnt)cnt.textContent=list.length+'টি বই';
+  if(!list.length){el.innerHTML='<div class="empty-st" style="grid-column:1/-1"><span class="ei">📭</span><div class="et">কোনো বই পাওয়া যায়নি</div><div class="ed">অন্য ক্যাটাগরি বা কীওয়ার্ড দিয়ে চেষ্টা করুন</div></div>';return;}
   el.innerHTML=list.map(([id,b])=>bcard(id,b)).join('');
 }
 
 function renderFeat(){
-  const el=document.getElementById('feat-grid'); if(!el) return;
+  const el=document.getElementById('feat-grid');if(!el)return;
   const list=Object.entries(books).filter(([,b])=>b.featured);
   const sec=document.getElementById('feat-sec');
-  if(!list.length){if(sec) sec.style.display='none';return;}
-  if(sec) sec.style.display='block';
+  if(!list.length){if(sec)sec.style.display='none';return;}
+  if(sec)sec.style.display='block';
   el.innerHTML=list.map(([id,b])=>bcard(id,b)).join('');
 }
 
 function bcard(id,b){
-  const free=!b.price||b.price===0, st=stars(b.rating||0);
-  const img=b.coverUrl?`<img src="${b.coverUrl}" alt="${b.title}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'';
-  const ph=`<div class="bcard-img-ph" ${b.coverUrl?'style="display:none"':''}>📖</div>`;
-  return `<div class="bcard" onclick="openDetail('${id}')">
-    <div class="bcard-img">${img}${ph}
-      ${free?'<span class="tag-free">ফ্রি</span>':''}
-      ${b.featured?'<span class="tag-feat">⭐</span>':''}
+  const free=!b.price||b.price===0;
+  const disc=b.discount||0;
+  const fp=calcFinalPrice(b);
+  const st=stars(b.rating||0);
+  const img=b.coverUrl?`<img src="${b.coverUrl}" alt="${b.title}" loading="lazy" onerror="this.style.display='none'">`:'';
+  const ph=`<div class="bc-ph" ${b.coverUrl?'style="display:none"':''}>📖</div>`;
+  return `<div class="bc" onclick="openDetail('${id}')">
+    <div class="bc-img">${img}${ph}
+      <div class="bc-tags">
+        ${free?'<span class="badge-free">বিনামূল্যে</span>':''}
+        ${disc>0?`<span class="badge-sale">${disc}% ছাড়</span>`:''}
+      </div>
+      ${b.featured?'<span class="bc-feat"><span class="badge-feat">⭐ বিশেষ</span></span>':''}
     </div>
-    <div class="bcard-body">
-      <div class="bcard-cat">${b.category||''}</div>
-      <div class="bcard-title">${b.title||''}</div>
-      <div class="bcard-author">${b.author||''}</div>
-      <div class="bcard-foot">
-        <span class="bcard-price ${free?'free':''}">${free?'বিনামূল্যে':'৳'+b.price}</span>
-        <span class="stars">${st}</span>
+    <div class="bc-body">
+      <div class="bc-cat">${b.category||''}</div>
+      <div class="bc-title">${b.title||''}</div>
+      <div class="bc-author">${b.author||''}</div>
+      <div class="bc-foot">
+        <span class="bc-price ${free?'free':''}">
+          ${free?'বিনামূল্যে':disc>0?`<span class="orig">৳${b.price}</span>৳${fp}`:'৳'+b.price}
+        </span>
+        <span class="bc-stars">${st}</span>
       </div>
       <button class="btn-more">বিস্তারিত →</button>
     </div>
   </div>`;
 }
 
-function stars(r){let s='';for(let i=1;i<=5;i++)s+=i<=r?'★':'☆';return s;}
+function stars(r){let s='';for(let i=1;i<=5;i++)s+=i<=Math.round(r)?'★':'☆';return s;}
 
-// ═══════════════════════════════════
-// DETAIL
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// বই বিস্তারিত
+// ════════════════════════════════════
 function openDetail(id){
-  curBook=id;
-  const b=books[id]; if(!b) return;
-  const free=!b.price||b.price===0, st=stars(b.rating||0);
+  curBook=id;appliedCoupon=null;
+  const b=books[id];if(!b)return;
+  const free=!b.price||b.price===0;
+  const disc=b.discount||0;
+  const fp=calcFinalPrice(b);
+  finalPrice=fp;
+  const st=stars(b.rating||0);
   const img=b.coverUrl?`<img src="${b.coverUrl}" alt="${b.title}" onerror="this.style.display='none'">`:'';
-  const ph=`<div class="detail-cover-ph" ${b.coverUrl?'style="display:none"':''}>📖</div>`;
+  const ph=`<div class="det-cover-ph" ${b.coverUrl?'style="display:none"':''}>📖</div>`;
+  const shots=(b.screenshots||'').split('\n').map(s=>s.trim()).filter(Boolean);
+  const shotsHTML=shots.length?`<div class="det-screenshots">${shots.map(s=>`<img src="${s}" onclick="viewImg('${s}')" alt="স্ক্রিনশট" onerror="this.style.display='none'">`).join('')}</div>`:'';
   const rel=Object.entries(books).filter(([rid,rb])=>rid!==id&&rb.category===b.category).slice(0,4);
 
-  document.getElementById('detail-content').innerHTML=`
-    <div class="detail-wrap">
-      <button class="back" onclick="showPage('home')">← ফিরে যান</button>
-      <div class="detail-grid">
-        <div><div class="detail-cover">${img}${ph}</div></div>
-        <div class="detail-info">
-          <div class="detail-cat">${b.category||''}</div>
-          <h1 class="detail-title">${b.title||''}</h1>
-          <div class="detail-author">লেখক: <em>${b.author||''}</em></div>
+  document.getElementById('det-content').innerHTML=`
+    <div class="det-wrap">
+      <button class="back-btn" onclick="showPage('home')">← ফিরে যান</button>
+      <div class="det-grid">
+        <div>
+          <div class="det-cover">
+            <div class="det-cover-main">${img}${ph}</div>
+            ${shotsHTML}
+          </div>
+        </div>
+        <div class="det-info">
+          <div class="det-cat">${b.category||''}</div>
+          <h1 class="det-title">${b.title||''}</h1>
+          <div class="det-author">লেখক: <em>${b.author||''}</em></div>
           <div class="meta-grid">
-            <div class="meta-i"><span class="meta-l">ভাষা</span><span class="meta-v">${b.language||'বাংলা'}</span></div>
-            <div class="meta-i"><span class="meta-l">পেজ</span><span class="meta-v">${b.pages||'-'}</span></div>
-            <div class="meta-i"><span class="meta-l">ফরম্যাট</span><span class="meta-v">PDF/eBook</span></div>
-            <div class="meta-i"><span class="meta-l">রেটিং</span><span class="meta-v" style="color:var(--gold)">${st} (${b.totalRatings||0})</span></div>
+            <div class="mi"><span class="ml">ভাষা</span><span class="mv">${b.language||'বাংলা'}</span></div>
+            <div class="mi"><span class="ml">পেজ</span><span class="mv">${b.pages||'—'}</span></div>
+            <div class="mi"><span class="ml">ফরম্যাট</span><span class="mv">পিডিএফ/ইবুক</span></div>
+            <div class="mi"><span class="ml">রেটিং</span><span class="mv" style="color:var(--gold)">${st} (${b.totalRatings||0})</span></div>
           </div>
-          <div class="detail-price ${free?'free':''}">${free?'বিনামূল্যে':'৳'+b.price}</div>
+          <div class="det-price-row">
+            <div class="det-price ${free?'free':''}" id="det-final-price">
+              ${free?'বিনামূল্যে':disc>0?`৳${fp}`:'৳'+b.price}
+            </div>
+            ${disc>0&&!free?`<div class="det-orig-price">৳${b.price}</div><div class="det-discount-tag">${disc}% ছাড়</div>`:''}
+          </div>
+          ${!free?`<div>
+            <div class="coupon-row">
+              <input type="text" id="coupon-inp" class="fi" placeholder="কুপন কোড লিখুন..." style="text-transform:uppercase">
+              <button class="btn btn-blue btn-sm" onclick="applyCoupon('${id}')">প্রয়োগ করুন</button>
+            </div>
+            <div id="coupon-result"></div>
+          </div>`:''}
           <div class="act-btns">
-            ${free?`<a href="${b.downloadUrl}" target="_blank" class="btn btn-gold btn-lg">📥 ডাউনলোড করুন</a>`:`<button class="btn btn-gold btn-lg" onclick="openPay('${id}')">🛒 কিনুন — ৳${b.price}</button>`}
-            <button class="btn btn-outline" onclick="toggleWish('${id}','${b.title}')" id="wb-${id}">${isWished(id)?'❤️ উইশলিস্টে':'🤍 উইশলিস্ট'}</button>
+            ${free?`<a href="${b.downloadUrl}" target="_blank" class="btn btn-gold btn-lg">📥 ডাউনলোড করুন</a>`:`<button class="btn btn-gold btn-lg" id="buy-btn" onclick="openPay('${id}')">🛒 কিনুন — ৳${fp}</button>`}
+            <button class="btn btn-out" onclick="toggleWish('${id}','${b.title}')" id="wb-${id}">${isWished(id)?'❤️ উইশলিস্টে':'🤍 উইশলিস্ট'}</button>
           </div>
-          <div class="detail-desc">${b.description||''}</div>
+          <div class="det-desc">${b.description||''}</div>
         </div>
       </div>
 
-      <div class="reviews-sec">
-        <div class="sec-head"><h2 class="sec-title">💬 <span>রিভিউ</span></h2></div>
+      <div class="rev-sec">
+        <div class="sec-head"><h2 class="sec-title">💬 <span>পাঠক মন্তব্য</span></h2></div>
         <div class="avg-box">
-          <div class="avg-num">${(b.rating||0).toFixed(1)}</div>
-          <div><div class="avg-stars">${stars(b.rating||0)}</div><div class="avg-cnt">${b.totalRatings||0}টি রিভিউ</div></div>
+          <div class="avg-n">${(b.rating||0).toFixed(1)}</div>
+          <div><div class="avg-st">${stars(b.rating||0)}</div><div class="avg-c">${b.totalRatings||0}টি মন্তব্য</div></div>
         </div>
         <div id="rev-list"></div>
         ${me?`<div class="rev-form">
-          <h3>রিভিউ দিন</h3>
-          <div class="star-row" id="star-row">${[1,2,3,4,5].map(n=>`<button class="star-btn" onclick="setStar(${n})">★</button>`).join('')}</div>
+          <h3>মন্তব্য দিন</h3>
+          <div class="star-row" id="star-row">${[1,2,3,4,5].map(n=>`<button class="s-btn" onclick="setStar(${n})">★</button>`).join('')}</div>
           <div class="fg"><textarea id="rev-txt" class="ft" placeholder="আপনার মন্তব্য..."></textarea></div>
-          <button class="btn btn-outline" onclick="submitRev('${id}')" style="margin-top:10px">রিভিউ পাঠান</button>
-        </div>`:`<div style="padding:18px;text-align:center;color:var(--text-3);font-size:.87rem"><a href="#" onclick="showPage('auth')" style="color:var(--gold)">লগইন করুন</a> রিভিউ দিতে</div>`}
+          <button class="btn btn-out" onclick="submitRev('${id}')" style="margin-top:9px">মন্তব্য পাঠান</button>
+        </div>`:`<div style="padding:16px;text-align:center;color:var(--t3);font-size:.85rem"><a href="#" onclick="showPage('auth')" style="color:var(--gold)">লগইন করুন</a> মন্তব্য দিতে</div>`}
       </div>
-
-      ${rel.length?`<div style="border-top:1px solid var(--border);padding-top:36px;margin-top:36px">
+      ${rel.length?`<div style="border-top:1px solid var(--bd);padding-top:32px;margin-top:32px">
         <div class="sec-head"><h2 class="sec-title">সম্পর্কিত <span>বই</span></h2></div>
         <div class="grid">${rel.map(([rid,rb])=>bcard(rid,rb)).join('')}</div>
       </div>`:''}
     </div>`;
-
   loadRevs(id);
   showPage('detail');
 }
 
+// কুপন প্রয়োগ
+function applyCoupon(bookId){
+  const code=v('coupon-inp').toUpperCase();
+  const resEl=document.getElementById('coupon-result');
+  if(!code){resEl.innerHTML='<div class="coupon-result err">কুপন কোড লিখুন</div>';return;}
+  const b=books[bookId];
+  const cp=Object.entries(coupons).find(([,c])=>c.code===code&&c.active!==false);
+  if(!cp){resEl.innerHTML='<div class="coupon-result err">❌ অবৈধ বা মেয়াদোত্তীর্ণ কুপন</div>';return;}
+  const [cpId,cpData]=cp;
+  const basePrice=calcFinalPrice(b);
+  let newPrice=basePrice;
+  if(cpData.type==='percent') newPrice=Math.round(basePrice*(1-cpData.value/100));
+  else newPrice=Math.max(0,basePrice-cpData.value);
+  appliedCoupon={id:cpId,code,discount:basePrice-newPrice};
+  finalPrice=newPrice;
+  resEl.innerHTML=`<div class="coupon-result ok">✅ কুপন প্রয়োগ হয়েছে! ৳${basePrice-newPrice} ছাড় পেয়েছেন</div>`;
+  const priceEl=document.getElementById('det-final-price');
+  if(priceEl)priceEl.innerHTML=`৳${newPrice}`;
+  const buyBtn=document.getElementById('buy-btn');
+  if(buyBtn)buyBtn.innerHTML=`🛒 কিনুন — ৳${newPrice}`;
+}
+
 function loadRevs(bid){
   db.ref('reviews/'+bid).once('value').then(s=>{
-    const el=document.getElementById('rev-list'); if(!el) return;
+    const el=document.getElementById('rev-list');if(!el)return;
     const list=Object.values(s.val()||{}).sort((a,b)=>b.createdAt-a.createdAt);
-    if(!list.length){el.innerHTML='<div style="color:var(--text-3);font-size:.87rem;padding:10px 0">এখনও কোনো রিভিউ নেই।</div>';return;}
-    el.innerHTML=list.map(r=>`<div class="rev-card"><div class="rev-head"><div><div class="rev-name">${r.userName||'অজ্ঞাত'}</div><div style="font-size:.74rem;color:var(--gold)">${stars(r.rating)}</div></div><div class="rev-date">${new Date(r.createdAt).toLocaleDateString('bn-BD')}</div></div><div class="rev-text">${r.comment||''}</div></div>`).join('');
+    if(!list.length){el.innerHTML='<div style="color:var(--t3);font-size:.84rem;padding:9px 0">এখনও কোনো মন্তব্য নেই।</div>';return;}
+    el.innerHTML=list.map(r=>`<div class="rv"><div class="rv-hd"><div class="rv-name">${r.userName||'অজ্ঞাত'} ${r.userBadge?r.userBadge:''}</div><div style="display:flex;align-items:center;gap:8px"><div style="font-size:.74rem;color:var(--gold)">${stars(r.rating)}</div><div class="rv-date">${new Date(r.createdAt).toLocaleDateString('bn-BD')}</div></div></div><div class="rv-txt">${r.comment||''}</div></div>`).join('');
+  });
+}
+function setStar(n){selStar=n;document.querySelectorAll('#star-row .s-btn').forEach((b,i)=>b.classList.toggle('on',i<n));}
+function submitRev(bid){
+  if(!me)return toast('লগইন করুন','err');
+  if(!selStar)return toast('রেটিং দিন','err');
+  const txt=v('rev-txt');
+  const ud=users[me.uid]||{};
+  const isReseller=Object.values(resellers).some(r=>r.email===me.email);
+  const ordCount=ud.orders||0;
+  let userBadge='<span class="badge badge-new" style="font-size:.6rem">📗</span>';
+  if(me.email===ADMIN)userBadge='<span class="badge badge-admin" style="font-size:.6rem">👑</span>';
+  else if(isReseller)userBadge='<span class="badge badge-reseller" style="font-size:.6rem">🤝</span>';
+  else if(ordCount>=10)userBadge='<span class="badge badge-vip" style="font-size:.6rem">💎</span>';
+  else if(ordCount>=3)userBadge='<span class="badge badge-regular" style="font-size:.6rem">📘</span>';
+  db.ref('reviews/'+bid).push({userId:me.uid,userName:me.displayName||me.email.split('@')[0],userBadge,rating:selStar,comment:txt,createdAt:Date.now()}).then(()=>{
+    db.ref('reviews/'+bid).once('value').then(s=>{
+      const list=Object.values(s.val()||{}),avg=list.reduce((a,r)=>a+r.rating,0)/list.length;
+      db.ref('books/'+bid).update({rating:Math.round(avg*10)/10,totalRatings:list.length});
+    });
+    toast('মন্তব্য পাঠানো হয়েছে!','ok');selStar=0;set('rev-txt','');
+    document.querySelectorAll('.s-btn').forEach(b=>b.classList.remove('on'));loadRevs(bid);
   });
 }
 
-function setStar(n){
-  selStar=n;
-  document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('on',i<n));
-}
-
-function submitRev(bid){
-  if(!me) return toast('লগইন করুন','err');
-  if(!selStar) return toast('রেটিং দিন','err');
-  const txt=document.getElementById('rev-txt').value.trim();
-  db.ref('reviews/'+bid).push({userId:me.uid,userName:me.displayName||me.email.split('@')[0],rating:selStar,comment:txt,createdAt:Date.now()})
-    .then(()=>{
-      db.ref('reviews/'+bid).once('value').then(s=>{
-        const list=Object.values(s.val()||{}), avg=list.reduce((a,r)=>a+r.rating,0)/list.length;
-        db.ref('books/'+bid).update({rating:Math.round(avg*10)/10,totalRatings:list.length});
-      });
-      toast('রিভিউ পাঠানো হয়েছে!','ok');
-      selStar=0;
-      document.getElementById('rev-txt').value='';
-      document.querySelectorAll('.star-btn').forEach(b=>b.classList.remove('on'));
-      loadRevs(bid);
-    });
-}
-
-// Wishlist
+// উইশলিস্ট
 function getWish(){return JSON.parse(localStorage.getItem('kml-wl')||'[]');}
 function isWished(id){return getWish().some(w=>w.id===id);}
 function toggleWish(id,title){
@@ -1184,386 +1158,381 @@ function toggleWish(id,title){
   if(isWished(id)){wl=wl.filter(w=>w.id!==id);toast('উইশলিস্ট থেকে সরানো হয়েছে','info');}
   else{wl.push({id,title});toast('উইশলিস্টে যোগ হয়েছে ❤️','ok');}
   localStorage.setItem('kml-wl',JSON.stringify(wl));
-  const b=document.getElementById('wb-'+id);
-  if(b) b.innerHTML=isWished(id)?'❤️ উইশলিস্টে':'🤍 উইশলিস্ট';
+  const b=document.getElementById('wb-'+id);if(b)b.innerHTML=isWished(id)?'❤️ উইশলিস্টে':'🤍 উইশলিস্ট';
 }
 
-// ═══════════════════════════════════
-// PAYMENT
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// পেমেন্ট
+// ════════════════════════════════════
 function openPay(id){
   if(!me){toast('কিনতে লগইন করুন','err');showPage('auth');return;}
   curBook=id;
   const b=books[id];
-  document.getElementById('pay-m-title').textContent='কিনুন: '+b.title;
-  upUrl=''; payMeth='bkash';
-  renderPayS1(b);
+  const price=finalPrice||calcFinalPrice(b);
+  document.getElementById('pay-m-t').textContent='কিনুন: '+b.title;
+  upUrl='';payMeth='bkash';
+  renderPayS1(b,price);
   document.getElementById('pay-modal').classList.add('on');
 }
-
-function renderPayS1(b){
-  const n={bkash:sets.bkash||'01XXXXXXXXX',nagad:sets.nagad||'01XXXXXXXXX',rocket:sets.rocket||'01XXXXXXXXX',upay:sets.upay||'01XXXXXXXXX'};
+function renderPayS1(b,price){
+  const n={bkash:settings.bkash||'০১XXXXXXXXX',nagad:settings.nagad||'০১XXXXXXXXX',rocket:settings.rocket||'০১XXXXXXXXX',upay:settings.upay||'০১XXXXXXXXX'};
   const lbl={bkash:'বিকাশ 🟣',nagad:'নগদ 🟠',rocket:'রকেট 💜',upay:'উপায় 🟢'};
-  document.getElementById('pay-m-body').innerHTML=`
-    <div class="stepper">
-      ${[1,2].map((x,i)=>`<div class="si"><div class="sc ${x===1?'act':''}">${x}</div>${i<1?'<div class="sl"></div>':''}</div>`).join('')}
-    </div>
-    <p style="text-align:center;color:var(--text-2);margin-bottom:18px;font-size:.88rem">পেমেন্ট করুন <strong style="color:var(--gold)">৳${b.price}</strong></p>
-    <div class="pay-tabs">${Object.keys(n).map((k,i)=>`<button class="ptab ${i===0?'on':''}" onclick="setPMeth('${k}',this)">${lbl[k]}</button>`).join('')}</div>
-    ${Object.entries(n).map(([k,num],i)=>`
-      <div class="pcontent ${i===0?'on':''}" id="pc-${k}">
-        <div class="pay-num-box">
-          <div style="font-size:.72rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em">${lbl[k]}</div>
-          <div class="pay-num">${num}</div>
-          <button class="copy-btn" onclick="copyNum('${num}',this)">📋 কপি</button>
-        </div>
-        <ol class="pay-steps">
-          <li><span class="snum">১</span>${lbl[k].split(' ')[0]} অ্যাপ খুলুন</li>
-          <li><span class="snum">২</span>Send Money সিলেক্ট করুন</li>
-          <li><span class="snum">৩</span>নম্বরে <strong style="color:var(--gold)">৳${b.price}</strong> পাঠান</li>
-          <li><span class="snum">৪</span>Transaction ID ও স্ক্রিনশট রাখুন</li>
-        </ol>
-      </div>`).join('')}
-    <button class="btn btn-gold" style="width:100%" onclick="renderPayS2('${b.price}')">পেমেন্ট করেছি → পরবর্তী ধাপ</button>`;
+  document.getElementById('pay-m-b').innerHTML=`
+    <div class="stepper">${[1,2].map((x,i)=>`<div class="s-i"><div class="s-c ${x===1?'act':''}">${x}</div>${i<1?'<div class="s-l"></div>':''}</div>`).join('')}</div>
+    <p style="text-align:center;color:var(--t2);margin-bottom:16px;font-size:.86rem">পেমেন্ট করুন <strong style="color:var(--gold)">৳${price}</strong></p>
+    <div class="pay-tabs">${Object.keys(n).map((k,i)=>`<button class="p-tab ${i===0?'on':''}" onclick="setPM('${k}',this)">${lbl[k]}</button>`).join('')}</div>
+    ${Object.entries(n).map(([k,num],i)=>`<div class="p-content ${i===0?'on':''}" id="pc-${k}">
+      <div class="p-num-box"><div style="font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.05em">${lbl[k]}</div>
+      <div class="p-num">${num}</div><button class="cp-btn" onclick="cpNum('${num}',this)">📋 কপি করুন</button></div>
+      <ol class="p-steps">
+        <li><span class="sn">১</span>${lbl[k].split(' ')[0]} অ্যাপ খুলুন</li>
+        <li><span class="sn">২</span>Send Money সিলেক্ট করুন</li>
+        <li><span class="sn">৩</span>নম্বরে <strong style="color:var(--gold)">৳${price}</strong> পাঠান। Reference-এ আপনার ইমেইল লিখুন</li>
+        <li><span class="sn">৪</span>Transaction ID ও স্ক্রিনশট রাখুন</li>
+      </ol>
+    </div>`).join('')}
+    <button class="btn btn-gold" style="width:100%" onclick="renderPayS2('${b.price}','${price}')">পেমেন্ট করেছি → পরবর্তী ধাপ</button>`;
 }
-
-function setPMeth(k,b){
-  payMeth=k;
-  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('on')); b.classList.add('on');
-  document.querySelectorAll('.pcontent').forEach(c=>c.classList.remove('on'));
-  document.getElementById('pc-'+k).classList.add('on');
-}
-
-function copyNum(n,b){
-  navigator.clipboard.writeText(n).then(()=>{b.textContent='✓ কপি!';b.classList.add('ok');setTimeout(()=>{b.textContent='📋 কপি';b.classList.remove('ok');},2000);});
-}
-
-function renderPayS2(price){
-  document.getElementById('pay-m-body').innerHTML=`
-    <div class="stepper">
-      ${[1,2].map((x,i)=>`<div class="si"><div class="sc ${x===1?'done':'act'}">${x===1?'✓':x}</div>${i<1?'<div class="sl done"></div>':''}</div>`).join('')}
-    </div>
-    <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">
+function setPM(k,b){payMeth=k;document.querySelectorAll('.p-tab').forEach(t=>t.classList.remove('on'));b.classList.add('on');document.querySelectorAll('.p-content').forEach(c=>c.classList.remove('on'));document.getElementById('pc-'+k).classList.add('on');}
+function cpNum(n,b){navigator.clipboard.writeText(n).then(()=>{b.textContent='✓ কপি হয়েছে!';b.classList.add('ok');setTimeout(()=>{b.textContent='📋 কপি করুন';b.classList.remove('ok');},2000);});}
+function renderPayS2(origPrice,price){
+  document.getElementById('pay-m-b').innerHTML=`
+    <div class="stepper">${[1,2].map((x,i)=>`<div class="s-i"><div class="s-c ${x===1?'done':'act'}">${x===1?'✓':x}</div>${i<1?'<div class="s-l done"></div>':''}</div>`).join('')}</div>
+    <div style="display:flex;flex-direction:column;gap:13px;margin-top:7px">
       <div class="fg"><label class="fl">ট্রানজেকশন আইডি (TrxID) *</label><input type="text" id="txn-inp" class="fi" placeholder="যেমন: 8N7A3B2X1C"></div>
-      <div class="fg">
-        <label class="fl">স্ক্রিনশট আপলোড *</label>
+      <div class="fg"><label class="fl">পেমেন্টের স্ক্রিনশট আপলোড করুন *</label>
         <div class="up-area" id="up-area">
           <input type="file" accept="image/*" onchange="doUpload(this)">
-          <div class="up-icon">📷</div>
-          <div class="up-text">ছবি বেছে নিন বা টেনে আনুন</div>
-          <div class="up-preview" id="up-prev"></div>
+          <div style="font-size:1.8rem;color:var(--t3);margin-bottom:6px">📷</div>
+          <div style="font-size:.82rem;color:var(--t2)">ছবি বেছে নিন বা টেনে আনুন</div>
+          <div class="up-prev" id="up-prev"></div>
         </div>
-        <div id="up-status" style="font-size:.78rem;color:var(--text-3);margin-top:5px"></div>
+        <div id="up-stat" style="font-size:.76rem;color:var(--t3);margin-top:4px"></div>
       </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-ghost" onclick="renderPayS1(books['${curBook}'])">← পিছনে</button>
-        <button class="btn btn-gold" style="flex:1" onclick="placeOrder('${curBook}','${price}')">✅ অর্ডার সাবমিট</button>
+      <div style="display:flex;gap:7px">
+        <button class="btn btn-ghost" onclick="renderPayS1(books['${curBook}'],${price})">← পিছনে</button>
+        <button class="btn btn-gold" style="flex:1" onclick="placeOrder('${curBook}','${origPrice}','${price}')">✅ অর্ডার সাবমিট করুন</button>
       </div>
     </div>`;
   setupDrop();
 }
-
 function setupDrop(){
-  const a=document.getElementById('up-area'); if(!a) return;
+  const a=document.getElementById('up-area');if(!a)return;
   a.addEventListener('dragover',e=>{e.preventDefault();a.classList.add('drag');});
   a.addEventListener('dragleave',()=>a.classList.remove('drag'));
   a.addEventListener('drop',e=>{e.preventDefault();a.classList.remove('drag');const f=e.dataTransfer.files[0];if(f)doUploadFile(f);});
 }
 function doUpload(inp){const f=inp.files[0];if(f)doUploadFile(f);}
 function doUploadFile(f){
-  const st=document.getElementById('up-status'); st.textContent='⏳ আপলোড হচ্ছে...';st.style.color='var(--gold)';
-  const fd=new FormData(); fd.append('image',f);
+  const st=document.getElementById('up-stat');st.textContent='⏳ আপলোড হচ্ছে...';st.style.color='var(--gold)';
+  const fd=new FormData();fd.append('image',f);
   fetch(`https://api.imgbb.com/1/upload?key=${IMGBB}`,{method:'POST',body:fd})
     .then(r=>r.json()).then(d=>{
       if(d.success){upUrl=d.data.url;st.textContent='✅ আপলোড সফল!';st.style.color='var(--ok)';document.getElementById('up-prev').innerHTML=`<img src="${d.data.thumb?.url||d.data.url}">`;}
       else{st.textContent='❌ আপলোড ব্যর্থ।';st.style.color='var(--err)';}
-    }).catch(()=>{const s=document.getElementById('up-status');if(s){s.textContent='❌ নেটওয়ার্ক সমস্যা।';s.style.color='var(--err)';}});
+    }).catch(()=>{const s=document.getElementById('up-stat');if(s){s.textContent='❌ নেটওয়ার্ক সমস্যা।';s.style.color='var(--err)';}});
 }
-
-async function placeOrder(bid,price){
-  const txn=document.getElementById('txn-inp')?.value.trim();
-  if(!txn) return toast('ট্রানজেকশন আইডি দিন','err');
-  if(!upUrl) return toast('স্ক্রিনশট আপলোড করুন','err');
-  const b=books[bid], oid='KML'+Date.now();
-  const ord={userId:me.uid,userName:me.displayName||me.email.split('@')[0],userEmail:me.email,bookId:bid,bookTitle:b.title,downloadUrl:b.downloadUrl,amount:Number(price),paymentMethod:payMeth,transactionId:txn,screenshotUrl:upUrl,status:'pending',createdAt:Date.now(),approvedAt:null,rejectionReason:null};
-  const sb=document.querySelector('#pay-modal .btn-gold');
-  if(sb){sb.disabled=true;sb.innerHTML='<span class="spin"></span> সাবমিট হচ্ছে...';}
+async function placeOrder(bid,origPrice,price){
+  const txn=v('txn-inp');
+  if(!txn)return toast('ট্রানজেকশন আইডি দিন','err');
+  if(!upUrl)return toast('স্ক্রিনশট আপলোড করুন','err');
+  const b=books[bid],oid='KML'+Date.now();
+  const cpDisc=appliedCoupon?appliedCoupon.discount:0;
+  const ord={userId:me.uid,userName:me.displayName||me.email.split('@')[0],userEmail:me.email,bookId:bid,bookTitle:b.title,downloadUrl:b.downloadUrl,originalPrice:Number(origPrice),amount:Number(price),discount:b.discount||0,couponCode:appliedCoupon?.code||'',couponDiscount:cpDisc,paymentMethod:payMeth,transactionId:txn,screenshotUrl:upUrl,status:'pending',createdAt:Date.now(),approvedAt:null,rejectionReason:null};
+  const sb=document.querySelector('#pay-modal .btn-gold');if(sb){sb.disabled=true;sb.innerHTML='<span class="spin-el"></span> সাবমিট হচ্ছে...';}
   try{
     await db.ref('orders/'+oid).set(ord);
+    // কুপন ব্যবহার কাউন্ট আপডেট
+    if(appliedCoupon){
+      const cpRef=db.ref('coupons/'+appliedCoupon.id);
+      const cpSnap=await cpRef.once('value');
+      const cpData=cpSnap.val();
+      const usedCount=(cpData.usedCount||0)+1;
+      await cpRef.update({usedCount});
+      if(cpData.maxUse>0&&usedCount>=cpData.maxUse) await cpRef.update({active:false});
+    }
+    // ইউজারের অর্ডার কাউন্ট বাড়ানো
+    const userRef=db.ref('users/'+me.uid);
+    const uSnap=await userRef.once('value');
+    const uData=uSnap.val()||{};
+    await userRef.update({orders:(uData.orders||0)+1});
     await emailjs.send(EJS_SID,EJS_TID,{from_name:ord.userName,from_email:ord.userEmail,book_title:b.title,amount:price,payment_method:payMeth,transaction_id:txn,screenshot_url:upUrl,order_id:oid});
-    document.getElementById('pay-m-body').innerHTML=`<div class="order-ok">
-      <span class="ok-icon">✅</span>
-      <div class="ok-title">অর্ডার সফল!</div>
-      <p style="color:var(--text-2);margin-bottom:10px">পর্যালোচনার জন্য পাঠানো হয়েছে।</p>
-      <div class="order-id">${oid}</div>
-      <p style="font-size:.82rem;color:var(--text-3);margin-top:10px">Admin অনুমোদনের পর ডাউনলোড লিংক পাবেন।</p>
-      <div style="display:flex;gap:8px;justify-content:center;margin-top:20px">
-        <button class="btn btn-gold" onclick="closeM('pay-modal');showPage('profile')">আমার অর্ডার দেখুন</button>
-        <button class="btn btn-ghost" onclick="closeM('pay-modal')">বন্ধ</button>
-      </div>
-    </div>`;
-  }catch(e){
-    if(sb){sb.disabled=false;sb.innerHTML='✅ অর্ডার সাবমিট';}
-    toast('সমস্যা: '+e.message,'err');
-  }
+    document.getElementById('pay-m-b').innerHTML=`<div class="ord-ok"><span class="ok-icon">✅</span><div class="ok-title">অর্ডার সফল!</div><p style="color:var(--t2);margin-bottom:9px">আপনার অর্ডার পর্যালোচনার জন্য পাঠানো হয়েছে।</p><div class="ord-id-box">${oid}</div><p style="font-size:.8rem;color:var(--t3);margin-top:9px">অ্যাডমিন অনুমোদনের পর ডাউনলোড লিংক পাবেন।</p><div style="display:flex;gap:7px;justify-content:center;margin-top:18px"><button class="btn btn-gold" onclick="closeM('pay-modal');showPage('profile')">আমার অর্ডার দেখুন</button><button class="btn btn-ghost" onclick="closeM('pay-modal')">বন্ধ করুন</button></div></div>`;
+  }catch(e){if(sb){sb.disabled=false;sb.innerHTML='✅ অর্ডার সাবমিট করুন';}toast('সমস্যা: '+e.message,'err');}
 }
-
 function closeM(id){document.getElementById(id).classList.remove('on');}
 
-// ═══════════════════════════════════
-// PROFILE
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// প্রোফাইল
+// ════════════════════════════════════
 function loadProfile(){
   if(!me){showPage('auth');return;}
-  loadOrders(); loadWishTab();
+  updateUserBadge(me);
+  const ud=users[me.uid]||{};
+  document.getElementById('p-stats').innerHTML=`
+    <div class="ps"><div class="ps-v">${ud.orders||0}</div><div class="ps-l">অর্ডার</div></div>
+    <div class="ps"><div class="ps-v">${ud.reviews||0}</div><div class="ps-l">মন্তব্য</div></div>`;
+  loadProfOrders();loadProfWish();loadProfRevs();
 }
 function profTab(t,b){
-  document.querySelectorAll('.ptab2').forEach(x=>x.classList.remove('on')); b.classList.add('on');
-  document.querySelectorAll('.ptcontent').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.p-tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  document.querySelectorAll('.p-tc').forEach(x=>x.classList.remove('on'));
   document.getElementById('pt-'+t).classList.add('on');
 }
-function loadOrders(){
-  const el=document.getElementById('pt-orders'); el.innerHTML='<div style="color:var(--text-3);padding:16px">লোড হচ্ছে...</div>';
+function loadProfOrders(){
+  const el=document.getElementById('pt-orders');el.innerHTML='<div style="color:var(--t3);padding:14px">লোড হচ্ছে...</div>';
   db.ref('orders').orderByChild('userId').equalTo(me.uid).on('value',s=>{
     const list=Object.entries(s.val()||{}).sort((a,b)=>b[1].createdAt-a[1].createdAt);
-    if(!list.length){el.innerHTML='<div class="empty"><div class="empty-ico">📦</div><div class="empty-t">কোনো অর্ডার নেই</div></div>';return;}
+    if(!list.length){el.innerHTML='<div class="empty-st"><span class="ei">📦</span><div class="et">কোনো অর্ডার নেই</div></div>';return;}
     el.innerHTML=list.map(([,o])=>{
       const b=books[o.bookId]||{};
-      const sb={pending:'s-pend',approved:'s-app',rejected:'s-rej'}[o.status];
-      const st={pending:'🟡 Pending',approved:'✅ অনুমোদিত',rejected:'❌ প্রত্যাখ্যাত'}[o.status];
+      const sb2={pending:'s-pend',approved:'s-app',rejected:'s-rej'}[o.status];
+      const st2={pending:'🟡 অপেক্ষমাণ',approved:'✅ অনুমোদিত',rejected:'❌ প্রত্যাখ্যাত'}[o.status];
       return `<div class="ord-card">
-        <div class="ord-cov">${b.coverUrl?`<img src="${b.coverUrl}" style="width:100%;height:100%;object-fit:cover">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.4rem">📖</div>'}</div>
-        <div><div class="ord-title">${o.bookTitle||'বই'}</div><div class="ord-meta">${new Date(o.createdAt).toLocaleDateString('bn-BD')} · ৳${o.amount} · ${o.paymentMethod}</div>
-        <span class="sbadge ${sb}">${st}</span>
-        ${o.status==='approved'?`<br><a href="${o.downloadUrl}" target="_blank" class="btn btn-ok btn-sm" style="margin-top:8px;display:inline-flex">📥 ডাউনলোড</a>`:''}
-        ${o.status==='rejected'&&o.rejectionReason?`<div style="margin-top:7px;font-size:.78rem;color:var(--err)">কারণ: ${o.rejectionReason}</div>`:''}
+        <div class="oc-img">${b.coverUrl?`<img src="${b.coverUrl}" style="width:100%;height:100%;object-fit:cover">`:'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.3rem">📖</div>'}</div>
+        <div><div class="oc-t">${o.bookTitle||'বই'}</div><div class="oc-m">${new Date(o.createdAt).toLocaleDateString('bn-BD')} · ৳${o.amount} · ${o.paymentMethod}${o.couponCode?` · কুপন: ${o.couponCode}`:''}</div>
+        <span class="sb ${sb2}">${st2}</span>
+        ${o.status==='approved'?`<br><a href="${o.downloadUrl}" target="_blank" class="btn btn-ok btn-sm" style="margin-top:7px;display:inline-flex">📥 ডাউনলোড করুন</a>`:''}
+        ${o.status==='rejected'&&o.rejectionReason?`<div style="margin-top:6px;font-size:.76rem;color:var(--err)">কারণ: ${o.rejectionReason}</div>`:''}
         </div>
       </div>`;
     }).join('');
   });
 }
-function loadWishTab(){
-  const el=document.getElementById('pt-wish'), wl=getWish();
-  if(!wl.length){el.innerHTML='<div class="empty"><div class="empty-ico">🤍</div><div class="empty-t">উইশলিস্ট খালি</div></div>';return;}
+function loadProfWish(){
+  const el=document.getElementById('pt-wish'),wl=getWish();
+  if(!wl.length){el.innerHTML='<div class="empty-st"><span class="ei">🤍</span><div class="et">উইশলিস্ট খালি</div></div>';return;}
   el.innerHTML='<div class="grid">'+wl.map(w=>{const b=books[w.id];return b?bcard(w.id,b):'';}).join('')+'</div>';
 }
+function loadProfRevs(){
+  const el=document.getElementById('pt-reviews');
+  db.ref('reviews').once('value').then(s=>{
+    const all=s.val()||{};
+    const myRevs=[];
+    Object.entries(all).forEach(([bid,revs])=>{Object.values(revs||{}).forEach(r=>{if(r.userId===me.uid)myRevs.push({...r,bookTitle:books[bid]?.title||'বই'});});});
+    if(!myRevs.length){el.innerHTML='<div class="empty-st"><span class="ei">💬</span><div class="et">কোনো মন্তব্য নেই</div></div>';return;}
+    el.innerHTML=myRevs.map(r=>`<div class="rv"><div class="rv-hd"><div class="rv-name">${r.bookTitle}</div><div style="color:var(--gold);font-size:.82rem">${stars(r.rating)}</div></div><div class="rv-txt">${r.comment||''}</div></div>`).join('');
+  });
+}
 
-// ═══════════════════════════════════
-// ADMIN
-// ═══════════════════════════════════
+// ════════════════════════════════════
+// অ্যাডমিন
+// ════════════════════════════════════
 function loadAdmin(){
   if(!me||me.email!==ADMIN){toast('অ্যাডমিন অ্যাক্সেস নেই','err');showPage('home');return;}
-  document.getElementById('a-email').textContent=ADMIN;
-  updateStats(); updateBTable(); loadAOrders(); loadSets(); renderCatAdmin(); renderResellers();
+  document.getElementById('a-em').textContent=ADMIN;
+  updateStats();updateBTable();loadAOrds();loadSets();renderCatList();renderRsList();renderCpList();
 }
-function adminTab(t,b){
-  document.querySelectorAll('.abtn').forEach(x=>x.classList.remove('on')); b.classList.add('on');
-  document.querySelectorAll('.asec').forEach(x=>x.classList.remove('on'));
+function aTab(t,b){
+  document.querySelectorAll('.a-nav-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  document.querySelectorAll('.a-sec').forEach(x=>x.classList.remove('on'));
   document.getElementById('a-'+t).classList.add('on');
 }
 function updateStats(){
-  const bk=Object.keys(books).length, ords=Object.values(orders);
+  const bk=Object.keys(books).length,ords=Object.values(orders);
   const pend=ords.filter(o=>o.status==='pending').length;
   const rev=ords.filter(o=>o.status==='approved').reduce((s,o)=>s+(o.amount||0),0);
-  const res=Object.keys(resellers).length;
-  document.getElementById('st-books').textContent=bk;
-  document.getElementById('st-orders').textContent=ords.length;
-  document.getElementById('st-pend').textContent=pend;
-  document.getElementById('st-rev').textContent='৳'+rev.toLocaleString();
-  document.getElementById('st-res').textContent=res;
-  const el=document.getElementById('recent-ord');
-  if(el){
-    const list=[...Object.entries(orders)].sort((a,b)=>b[1].createdAt-a[1].createdAt).slice(0,5);
-    el.innerHTML=list.length?list.map(([id,o])=>aordCard(id,o)).join(''):'<div class="empty"><div class="empty-ico">📦</div><div class="empty-t">কোনো অর্ডার নেই</div></div>';
-  }
+  const rs=Object.keys(resellers).length,us=Object.keys(users).length;
+  const set2=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set2('st-bk',bk);set2('st-or',ords.length);set2('st-pe',pend);set2('st-rv','৳'+rev.toLocaleString());set2('st-rs',rs);set2('st-us',us);
+  const rc=document.getElementById('recent-ords');
+  if(rc){const list=[...Object.entries(orders)].sort((a,b)=>b[1].createdAt-a[1].createdAt).slice(0,5);rc.innerHTML=list.length?list.map(([id,o])=>aOrdCard(id,o)).join(''):'<div class="empty-st"><span class="ei">📦</span><div class="et">কোনো অর্ডার নেই</div></div>';}
 }
-function loadAOrders(){
+function loadAOrds(){
   db.ref('orders').orderByChild('createdAt').on('value',s=>{orders=s.val()||{};renderAOrds();updateStats();});
 }
 function renderAOrds(){
-  const el=document.getElementById('a-ord-list'); if(!el) return;
+  const el=document.getElementById('a-ord-list');if(!el)return;
   let list=Object.entries(orders).sort((a,b)=>b[1].createdAt-a[1].createdAt);
-  if(aOrdFilter!=='all') list=list.filter(([,o])=>o.status===aOrdFilter);
-  if(!list.length){el.innerHTML='<div class="empty"><div class="empty-ico">📭</div><div class="empty-t">কোনো অর্ডার নেই</div></div>';return;}
-  el.innerHTML=list.map(([id,o])=>aordCard(id,o)).join('');
+  if(aOrdFilter!=='all')list=list.filter(([,o])=>o.status===aOrdFilter);
+  if(!list.length){el.innerHTML='<div class="empty-st"><span class="ei">📭</span><div class="et">কোনো অর্ডার নেই</div></div>';return;}
+  el.innerHTML=list.map(([id,o])=>aOrdCard(id,o)).join('');
 }
-function aordCard(id,o){
-  const stm={pending:'🟡 Pending',approved:'✅ Approved',rejected:'❌ Rejected'}[o.status];
+function aOrdCard(id,o){
+  const stm={pending:'🟡 অপেক্ষমাণ',approved:'✅ অনুমোদিত',rejected:'❌ প্রত্যাখ্যাত'}[o.status];
+  const sc={pending:'s-pend',approved:'s-app',rejected:'s-rej'}[o.status];
   return `<div class="ao-card ${o.status}">
-    <div class="ao-head">
+    <div class="ao-hd">
       <div><div class="ao-user">${o.userName||'অজ্ঞাত'}</div><div class="ao-email">${o.userEmail||''}</div></div>
-      <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
-        <span class="sbadge ${o.status==='pending'?'s-pend':o.status==='approved'?'s-app':'s-rej'}">${stm}</span>
-        <span style="font-size:.72rem;color:var(--text-3)">${new Date(o.createdAt).toLocaleString('bn-BD')}</span>
-      </div>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="sb ${sc}">${stm}</span><span style="font-size:.7rem;color:var(--t3)">${new Date(o.createdAt).toLocaleString('bn-BD')}</span></div>
     </div>
-    <div class="ao-book">${o.bookTitle||'বই'} — <span style="color:var(--gold)">৳${o.amount}</span></div>
-    <div class="ao-dets" style="margin-top:11px">
+    <div class="ao-book">${o.bookTitle||'বই'} — <span style="color:var(--gold)">৳${o.amount}</span>${o.couponCode?` <span style="font-size:.74rem;color:var(--t3)">(কুপন: ${o.couponCode}, ছাড়: ৳${o.couponDiscount||0})</span>`:''}</div>
+    <div class="ao-dets" style="margin-top:10px">
       <div><div class="ao-dl">পেমেন্ট</div><div class="ao-dv">${o.paymentMethod}</div></div>
       <div><div class="ao-dl">TrxID</div><div class="ao-dv" style="font-family:monospace">${o.transactionId}</div></div>
       <div><div class="ao-dl">স্ক্রিনশট</div><div class="ao-dv">${o.screenshotUrl?`<button class="btn btn-ghost btn-sm" onclick="viewImg('${o.screenshotUrl}')">🖼️ দেখুন</button>`:'নেই'}</div></div>
     </div>
-    ${o.status==='pending'?`<div class="ao-acts">
-      <button class="btn btn-ok btn-sm" onclick="approveOrd('${id}')">✅ Approve</button>
-      <button class="btn btn-err btn-sm" onclick="openRej('${id}')">❌ Reject</button>
-    </div>`:''}
-    ${o.status==='rejected'&&o.rejectionReason?`<div style="margin-top:7px;font-size:.78rem;color:var(--err)">কারণ: ${o.rejectionReason}</div>`:''}
+    ${o.status==='pending'?`<div class="ao-acts"><button class="btn btn-ok btn-sm" onclick="approveOrd('${id}')">✅ অনুমোদন করুন</button><button class="btn btn-err btn-sm" onclick="openRej('${id}')">❌ প্রত্যাখ্যান করুন</button></div>`:''}
+    ${o.status==='rejected'&&o.rejectionReason?`<div style="margin-top:6px;font-size:.76rem;color:var(--err)">কারণ: ${o.rejectionReason}</div>`:''}
   </div>`;
 }
-function aordFilter(f,b){
-  aOrdFilter=f;
-  document.querySelectorAll('#a-orders .pill').forEach(p=>p.classList.remove('on')); b.classList.add('on');
-  renderAOrds();
-}
-async function approveOrd(id){
-  await db.ref('orders/'+id).update({status:'approved',approvedAt:Date.now()});
-  toast('অর্ডার অনুমোদিত ✅','ok');
-}
-function openRej(id){document.getElementById('rej-id').value=id;document.getElementById('rej-reason').value='';document.getElementById('reject-modal').classList.add('on');}
+function aOrdF(f,b){aOrdFilter=f;document.querySelectorAll('#a-orders .pill').forEach(p=>p.classList.remove('on'));b.classList.add('on');renderAOrds();}
+async function approveOrd(id){await db.ref('orders/'+id).update({status:'approved',approvedAt:Date.now()});toast('অর্ডার অনুমোদিত ✅','ok');}
+function openRej(id){set2('rej-rsn','');document.getElementById('rej-id').value=id;document.getElementById('rej-modal').classList.add('on');}
 async function doReject(){
-  const id=document.getElementById('rej-id').value, r=document.getElementById('rej-reason').value.trim();
-  if(!r) return toast('কারণ লিখুন','err');
+  const id=document.getElementById('rej-id').value,r=v('rej-rsn');
+  if(!r)return toast('কারণ লিখুন','err');
   await db.ref('orders/'+id).update({status:'rejected',rejectionReason:r});
-  closeM('reject-modal'); toast('অর্ডার প্রত্যাখ্যাত','info');
+  closeM('rej-modal');toast('অর্ডার প্রত্যাখ্যাত','info');
 }
-function viewImg(url){document.getElementById('img-m-src').src=url;document.getElementById('img-modal').classList.add('on');}
+function viewImg(url){document.getElementById('img-m').src=url;document.getElementById('img-modal').classList.add('on');}
 
-// Book management
+// বই ম্যানেজ
 function updateBTable(){
-  const el=document.getElementById('b-tbody'); if(!el) return;
+  const el=document.getElementById('b-tbody');if(!el)return;
   const list=Object.entries(books);
-  const cnt=document.getElementById('a-bcnt'); if(cnt) cnt.textContent=list.length+'টি বই';
-  if(!list.length){el.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:28px">কোনো বই নেই</td></tr>';return;}
+  const cnt=document.getElementById('a-bcnt');if(cnt)cnt.textContent=list.length+'টি বই';
+  if(!list.length){el.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--t3);padding:24px">কোনো বই নেই</td></tr>';return;}
   el.innerHTML=list.map(([id,b])=>{
-    const free=!b.price||b.price===0;
+    const fp=calcFinalPrice(b);const free=!b.price||b.price===0;
     return `<tr>
       <td>${b.coverUrl?`<img src="${b.coverUrl}" class="t-cov" onerror="this.style.display='none'">`:'<div class="t-cov-ph">📖</div>'}</td>
-      <td style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:.95rem;max-width:170px">${b.title||''}</td>
-      <td style="color:var(--text-2);font-size:.82rem">${b.author||''}</td>
-      <td><span style="font-size:.72rem;background:rgba(201,168,76,.1);color:var(--gold);padding:2px 7px;border-radius:12px">${b.category||''}</span></td>
-      <td style="font-weight:700;color:${free?'var(--ok)':'var(--gold)'}">${free?'ফ্রি':'৳'+b.price}</td>
+      <td style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:.92rem;max-width:160px">${b.title||''}</td>
+      <td style="color:var(--t2);font-size:.8rem">${b.author||''}</td>
+      <td><span style="font-size:.7rem;background:rgba(201,168,76,.1);color:var(--gold);padding:2px 7px;border-radius:11px">${b.category||''}</span></td>
+      <td style="font-weight:700;color:${free?'var(--ok)':'var(--gold)'}">${free?'বিনামূল্যে':'৳'+fp}</td>
+      <td style="color:var(--err);font-size:.8rem">${b.discount?b.discount+'%':'—'}</td>
       <td style="text-align:center">${b.featured?'⭐':'—'}</td>
-      <td><div style="display:flex;gap:5px">
-        <button class="btn btn-ghost btn-sm" onclick="openEBook('${id}')">✏️</button>
-        <button class="btn btn-err btn-sm" onclick="delBook('${id}','${b.title}')">🗑️</button>
-        <button class="btn btn-ghost btn-sm" onclick="openDetail('${id}')">👁️</button>
-      </div></td>
+      <td><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-sm" onclick="openEditBook('${id}')">✏️</button><button class="btn btn-err btn-sm" onclick="delBook('${id}','${(b.title||'').replace(/'/g,'')}')">🗑️</button><button class="btn btn-ghost btn-sm" onclick="openDetail('${id}')">👁️</button></div></td>
     </tr>`;
   }).join('');
 }
-
 function saveBook(){
-  const title=document.getElementById('b-title').value.trim();
-  const author=document.getElementById('b-author').value.trim();
-  const cat=document.getElementById('b-cat').value;
-  const price=Number(document.getElementById('b-price').value)||0;
-  const cover=document.getElementById('b-cover').value.trim();
-  const dl=document.getElementById('b-dl').value.trim();
-  const desc=document.getElementById('b-desc').value.trim();
-  const lang=document.getElementById('b-lang').value.trim()||'বাংলা';
-  const pages=Number(document.getElementById('b-pages').value)||0;
-  const tags=document.getElementById('b-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
-  const feat=document.getElementById('b-feat').checked;
-  const res=document.getElementById('b-res').checked;
-  if(!title||!author||!cat||!cover||!dl||!desc) return toast('সব বাধ্যতামূলক ফিল্ড পূরণ করুন','err');
-  const data={title,author,category:cat,price,coverUrl:cover,downloadUrl:dl,description:desc,language:lang,pages,tags,featured:feat,resellerOnly:res,createdAt:Date.now(),rating:0,totalRatings:0};
-  db.ref('books').push(data)
-    .then(()=>{toast('বই যোগ হয়েছে ✅','ok');clearBForm();})
-    .catch(e=>toast('ব্যর্থ: '+e.message,'err'));
+  const title=v('b-title'),author=v('b-author'),cat=v('b-cat'),price=Number(v('b-price'))||0,disc=Number(v('b-disc'))||0,cover=v('b-cover'),dl=v('b-dl'),desc=v('b-desc'),lang=v('b-lang')||'বাংলা',pages=Number(v('b-pages'))||0,tags=v('b-tags').split(',').map(t=>t.trim()).filter(Boolean),feat=document.getElementById('b-feat').checked,res=document.getElementById('b-res').checked,shots=v('b-shots');
+  if(!title||!author||!cat||!cover||!dl||!desc)return toast('সব বাধ্যতামূলক ফিল্ড (*) পূরণ করুন','err');
+  const data={title,author,category:cat,price,discount:disc,coverUrl:cover,screenshots:shots,downloadUrl:dl,description:desc,language:lang,pages,tags,featured:feat,resellerOnly:res,createdAt:Date.now(),rating:0,totalRatings:0};
+  db.ref('books').push(data).then(()=>{toast('বই যোগ হয়েছে ✅','ok');clearBForm();}).catch(e=>toast('ব্যর্থ: '+e.message,'err'));
 }
-
 function clearBForm(){
-  ['b-title','b-author','b-price','b-cover','b-dl','b-desc','b-tags'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('b-lang').value='বাংলা';
-  document.getElementById('b-pages').value='';
+  ['b-title','b-author','b-price','b-disc','b-cover','b-shots','b-dl','b-desc','b-tags'].forEach(id=>set(id,''));
+  set('b-lang','বাংলা');set('b-pages','');
   document.getElementById('b-cat').value='';
-  document.getElementById('b-feat').checked=false;
-  document.getElementById('b-res').checked=false;
-  document.getElementById('bform-title').textContent='➕ নতুন বই যোগ করুন';
+  document.getElementById('b-feat').checked=false;document.getElementById('b-res').checked=false;
+  document.getElementById('bform-t').textContent='➕ নতুন বই যোগ করুন';
   document.getElementById('b-cancel').style.display='none';
 }
-function cancelBEdit(){clearBForm();}
-
 function delBook(id,title){
-  if(!confirm(`"${title}" মুছে ফেলবেন?`)) return;
-  db.ref('books/'+id).remove().then(()=>toast('বই মুছে ফেলা হয়েছে','info')).catch(e=>toast(e.message,'err'));
+  showConfirm('🗑️',`"${title}" মুছবেন?`,'এই বইটি স্থায়ীভাবে মুছে ফেলা হবে।',()=>{db.ref('books/'+id).remove().then(()=>toast('বই মুছে ফেলা হয়েছে','info')).catch(e=>toast(e.message,'err'));});
 }
-
-function openEBook(id){
-  const b=books[id]; if(!b) return;
+function openEditBook(id){
+  const b=books[id];if(!b)return;
+  const map={title:'eb-t',author:'eb-a',price:'eb-p',discount:'eb-d',coverUrl:'eb-cv',screenshots:'eb-sh',downloadUrl:'eb-dl',description:'eb-de',language:'eb-l',pages:'eb-pg'};
+  Object.entries(map).forEach(([k,eid])=>set(eid,b[k]||''));
+  document.getElementById('eb-c').value=b.category||'';
+  set('eb-tg',(b.tags||[]).join(', '));
+  document.getElementById('eb-ft').checked=!!b.featured;document.getElementById('eb-rs').checked=!!b.resellerOnly;
   document.getElementById('eb-id').value=id;
-  document.getElementById('eb-title').value=b.title||'';
-  document.getElementById('eb-author').value=b.author||'';
-  document.getElementById('eb-cat').value=b.category||'';
-  document.getElementById('eb-price').value=b.price||0;
-  document.getElementById('eb-cover').value=b.coverUrl||'';
-  document.getElementById('eb-dl').value=b.downloadUrl||'';
-  document.getElementById('eb-desc').value=b.description||'';
-  document.getElementById('eb-lang').value=b.language||'বাংলা';
-  document.getElementById('eb-pages').value=b.pages||'';
-  document.getElementById('eb-tags').value=(b.tags||[]).join(', ');
-  document.getElementById('eb-feat').checked=!!b.featured;
-  document.getElementById('eb-res').checked=!!b.resellerOnly;
-  document.getElementById('edit-book-modal').classList.add('on');
+  document.getElementById('edit-bk-modal').classList.add('on');
 }
 function updateBook(){
   const id=document.getElementById('eb-id').value;
-  const d={title:document.getElementById('eb-title').value.trim(),author:document.getElementById('eb-author').value.trim(),category:document.getElementById('eb-cat').value,price:Number(document.getElementById('eb-price').value)||0,coverUrl:document.getElementById('eb-cover').value.trim(),downloadUrl:document.getElementById('eb-dl').value.trim(),description:document.getElementById('eb-desc').value.trim(),language:document.getElementById('eb-lang').value.trim()||'বাংলা',pages:Number(document.getElementById('eb-pages').value)||0,tags:document.getElementById('eb-tags').value.split(',').map(t=>t.trim()).filter(Boolean),featured:document.getElementById('eb-feat').checked,resellerOnly:document.getElementById('eb-res').checked};
-  db.ref('books/'+id).update(d).then(()=>{toast('বই আপডেট ✅','ok');closeM('edit-book-modal');}).catch(e=>toast(e.message,'err'));
+  const data={title:v('eb-t'),author:v('eb-a'),category:v('eb-c'),price:Number(v('eb-p'))||0,discount:Number(v('eb-d'))||0,coverUrl:v('eb-cv'),screenshots:v('eb-sh'),downloadUrl:v('eb-dl'),description:v('eb-de'),language:v('eb-l')||'বাংলা',pages:Number(v('eb-pg'))||0,tags:v('eb-tg').split(',').map(t=>t.trim()).filter(Boolean),featured:document.getElementById('eb-ft').checked,resellerOnly:document.getElementById('eb-rs').checked};
+  db.ref('books/'+id).update(data).then(()=>{toast('বই আপডেট ✅','ok');closeM('edit-bk-modal');}).catch(e=>toast(e.message,'err'));
 }
 
-// Resellers
-function addReseller(){
-  const n=document.getElementById('rs-name').value.trim(), e=document.getElementById('rs-email').value.trim();
-  const ph=document.getElementById('rs-phone').value.trim(), com=Number(document.getElementById('rs-com').value)||0;
-  const note=document.getElementById('rs-note').value.trim();
-  if(!n||!e) return toast('নাম ও ইমেইল দিন','err');
-  db.ref('resellers').push({name:n,email:e,phone:ph,commission:com,note,createdAt:Date.now()})
-    .then(()=>{toast('রিসেলার যোগ হয়েছে ✅','ok');['rs-name','rs-email','rs-phone','rs-com','rs-note'].forEach(id=>document.getElementById(id).value='');})
-    .catch(e=>toast(e.message,'err'));
+// রিসেলার
+function saveReseller(){
+  const id=document.getElementById('rs-id').value;
+  const nm=v('rs-nm'),em=v('rs-em'),ph=v('rs-ph'),com=Number(v('rs-com'))||0,note=v('rs-note');
+  if(!nm||!em)return toast('নাম ও ইমেইল দিন','err');
+  const data={name:nm,email:em,phone:ph,commission:com,note,createdAt:Date.now(),active:true};
+  const ref=id?db.ref('resellers/'+id):db.ref('resellers').push();
+  (id?ref.update(data):ref.set(data)).then(()=>{toast(id?'রিসেলার আপডেট ✅':'রিসেলার যোগ হয়েছে ✅','ok');clearRsForm();}).catch(e=>toast(e.message,'err'));
+}
+function clearRsForm(){
+  ['rs-nm','rs-em','rs-ph','rs-com','rs-note'].forEach(id=>set(id,''));
+  document.getElementById('rs-id').value='';
+  document.getElementById('rs-save-btn').innerHTML='🤝 রিসেলার সেভ করুন';
+  document.getElementById('rs-cancel').style.display='none';
+}
+function editReseller(id){
+  const r=resellers[id];if(!r)return;
+  set('rs-nm',r.name);set('rs-em',r.email);set('rs-ph',r.phone||'');set('rs-com',r.commission);set('rs-note',r.note||'');
+  document.getElementById('rs-id').value=id;
+  document.getElementById('rs-save-btn').innerHTML='💾 আপডেট করুন';
+  document.getElementById('rs-cancel').style.display='inline-flex';
+  document.getElementById('a-resell').scrollIntoView({behavior:'smooth'});
 }
 function delReseller(id,name){
-  if(!confirm(`"${name}" সরাবেন?`)) return;
-  db.ref('resellers/'+id).remove().then(()=>toast('রিসেলার সরানো হয়েছে','info'));
+  showConfirm('🗑️',`"${name}" সরাবেন?`,'এই রিসেলারকে তালিকা থেকে সরানো হবে।',()=>{db.ref('resellers/'+id).remove().then(()=>toast('রিসেলার সরানো হয়েছে','info'));});
 }
-function renderResellers(){
-  const el=document.getElementById('res-list'); if(!el) return;
+function renderRsList(){
+  const el=document.getElementById('rs-list');if(!el)return;
   const list=Object.entries(resellers);
-  const cnt=document.getElementById('res-cnt'); if(cnt) cnt.textContent=list.length+'জন';
-  if(!list.length){el.innerHTML='<div class="empty"><div class="empty-ico">🤝</div><div class="empty-t">কোনো রিসেলার নেই</div></div>';return;}
+  const cnt=document.getElementById('rs-cnt');if(cnt)cnt.textContent=list.length+'জন';
+  if(!list.length){el.innerHTML='<div class="empty-st"><span class="ei">🤝</span><div class="et">কোনো রিসেলার নেই</div></div>';return;}
   el.innerHTML=list.map(([id,r])=>`
     <div class="res-card">
-      <div><div class="res-name">${r.name}</div><div class="res-email">${r.email}${r.phone?' · '+r.phone:''}</div>${r.note?`<div style="font-size:.74rem;color:var(--text-3)">${r.note}</div>`:''}</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="res-com">${r.commission}% কমিশন</div>
+      <div class="rc-info">
+        <div class="rc-name">${r.name} <span class="badge badge-reseller" style="font-size:.6rem">🤝 রিসেলার</span></div>
+        <div class="rc-email">${r.email}${r.phone?' · '+r.phone:''}</div>
+        ${r.note?`<div class="rc-note">${r.note}</div>`:''}
+      </div>
+      <div class="rc-right">
+        <div class="rc-com">${r.commission}% কমিশন</div>
+        <button class="btn btn-blue btn-sm" onclick="editReseller('${id}')">✏️ সম্পাদনা</button>
         <button class="btn btn-err btn-sm" onclick="delReseller('${id}','${r.name}')">🗑️</button>
       </div>
     </div>`).join('');
 }
 
-// Settings
+// কুপন
+function saveCoupon(){
+  const code=v('cp-code').toUpperCase(),type=v('cp-type'),val=Number(v('cp-val'))||0,max=Number(v('cp-max'))||0,desc=v('cp-desc');
+  if(!code||!val)return toast('কুপন কোড ও মূল্য দিন','err');
+  if(Object.values(coupons).some(c=>c.code===code))return toast('এই কুপন কোড আগে থেকেই আছে','err');
+  db.ref('coupons').push({code,type,value:val,maxUse:max,usedCount:0,description:desc,active:true,createdAt:Date.now()}).then(()=>{toast('কুপন তৈরি হয়েছে ✅','ok');['cp-code','cp-val','cp-max','cp-desc'].forEach(id=>set(id,''));}).catch(e=>toast(e.message,'err'));
+}
+function delCoupon(id,code){
+  showConfirm('🗑️',`"${code}" কুপন মুছবেন?`,'এই কুপন মুছে ফেলা হবে।',()=>{db.ref('coupons/'+id).remove().then(()=>toast('কুপন মুছে ফেলা হয়েছে','info'));});
+}
+function toggleCoupon(id,current){
+  db.ref('coupons/'+id).update({active:!current}).then(()=>toast('কুপনের অবস্থা পরিবর্তন হয়েছে','info'));
+}
+function renderCpList(){
+  const el=document.getElementById('cp-list');if(!el)return;
+  const list=Object.entries(coupons);
+  if(!list.length){el.innerHTML='<div class="empty-st"><span class="ei">🎟️</span><div class="et">কোনো কুপন নেই</div></div>';return;}
+  el.innerHTML=list.map(([id,c])=>`
+    <div class="cpn-card">
+      <div>
+        <div class="cpn-code">${c.code}</div>
+        <div class="cpn-info">${c.type==='percent'?c.value+'% ছাড়':'৳'+c.value+' ছাড়'} · ব্যবহার: ${c.usedCount||0}/${c.maxUse||'∞'} · ${c.description||''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="sb ${c.active?'s-app':'s-rej'}">${c.active?'সক্রিয়':'নিষ্ক্রিয়'}</span>
+        <button class="btn btn-blue btn-sm" onclick="toggleCoupon('${id}',${c.active})">${c.active?'বন্ধ করুন':'চালু করুন'}</button>
+        <button class="btn btn-err btn-sm" onclick="delCoupon('${id}','${c.code}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+// সেটিংস
 function loadSets(){
   db.ref('settings').once('value').then(s=>{
-    sets=s.val()||{};
-    ['bkash','nagad','rocket','upay','tag'].forEach(k=>{const el=document.getElementById('s-'+k);if(el) el.value=sets[k==='tag'?'tagline':k]||'';});
+    settings=s.val()||{};
+    ['bkash','nagad','rocket','upay'].forEach(k=>{const el=document.getElementById('s-'+k);if(el)el.value=settings[k]||'';});
+    const tg=document.getElementById('s-tag');if(tg)tg.value=settings.tagline||'';
   });
 }
 function saveSets(){
-  const d={bkash:document.getElementById('s-bkash').value.trim(),nagad:document.getElementById('s-nagad').value.trim(),rocket:document.getElementById('s-rocket').value.trim(),upay:document.getElementById('s-upay').value.trim(),tagline:document.getElementById('s-tag').value.trim()};
-  db.ref('settings').set(d).then(()=>{sets=d;toast('সেটিংস সেভ ✅','ok');}).catch(e=>toast(e.message,'err'));
+  const d={bkash:v('s-bkash'),nagad:v('s-nagad'),rocket:v('s-rocket'),upay:v('s-upay'),tagline:v('s-tag')};
+  db.ref('settings').set(d).then(()=>{settings=d;toast('সেটিংস সেভ হয়েছে ✅','ok');}).catch(e=>toast(e.message,'err'));
 }
 
-// Toast
+// ════════════════════════════════════
+// সহায়ক ফাংশন
+// ════════════════════════════════════
+function v(id){const el=document.getElementById(id);return el?(el.value||'').trim():'';}
+function set(id,val){const el=document.getElementById(id);if(el)el.value=val;}
+function set2(id,txt){const el=document.getElementById(id);if(el)el.textContent=txt;}
+function viewImg(url){document.getElementById('img-m').src=url;document.getElementById('img-modal').classList.add('on');}
 function toast(msg,type='info'){
-  const el=document.getElementById('toast-wrap');
-  const d=document.createElement('div'); d.className='toast '+type;
-  d.innerHTML=`<span>${{ok:'✅',err:'❌',info:'ℹ️'}[type]||'ℹ️'}</span><span>${msg}</span>`;
-  el.appendChild(d);
-  setTimeout(()=>{d.style.transition='opacity .28s';d.style.opacity='0';setTimeout(()=>d.remove(),280);},3200);
+  const c=document.getElementById('toast-box');const d=document.createElement('div');d.className='toast '+type;
+  d.innerHTML=`<span>${{ok:'✅',err:'❌',info:'ℹ️'}[type]||'ℹ️'}</span><span>${msg}</span>`;c.appendChild(d);
+  setTimeout(()=>{d.style.transition='opacity .26s';d.style.opacity='0';setTimeout(()=>d.remove(),260);},3200);
 }
-
-// Close modals on bg click
-document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
 </script>
 </body>
 </html>
