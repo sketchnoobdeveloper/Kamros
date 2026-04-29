@@ -402,13 +402,17 @@ a{text-decoration:none;color:inherit}
 
 /* ════════ USER MANAGEMENT ════════ */
 .user-card{display:flex;align-items:flex-start;gap:13px;padding:15px 17px;background:var(--c1);border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:9px;flex-wrap:wrap}
-.u-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#08080f;flex-shrink:0}
+.u-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#08080f;flex-shrink:0;position:relative}
+.u-av.banned{background:linear-gradient(135deg,var(--err),#8a2020)}
+.u-av.banned::after{content:'🚫';position:absolute;bottom:-2px;right:-4px;font-size:.7rem}
 .u-info{flex:1;min-width:160px}
 .u-name{font-weight:600;font-size:.9rem;margin-bottom:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .u-email{font-size:.76rem;color:var(--t3);margin-bottom:5px}
 .u-stats{display:flex;gap:10px;flex-wrap:wrap}
 .u-stat{font-size:.72rem;color:var(--t2);background:var(--c2);padding:2px 8px;border-radius:10px}
-.u-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.u-actions{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.badge-banned{background:rgba(224,82,82,.16);color:var(--err);border:1px solid rgba(224,82,82,.28);font-size:.64rem;padding:2px 7px;border-radius:13px;font-weight:700}
+.user-card.banned-card{border-color:rgba(224,82,82,.28);background:rgba(224,82,82,.03)}
 
 /* ════════ SETTINGS TABS ════════ */
 .set-tabs{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid var(--bd);padding-bottom:0}
@@ -916,6 +920,32 @@ footer{margin-top:60px;padding:36px 18px 26px;border-top:1px solid var(--bd);bac
   <input type="hidden" id="eb-id">
   <div style="display:flex;gap:8px;margin-top:16px"><button class="btn btn-gold" onclick="updateBook()">💾 আপডেট করুন</button><button class="btn btn-ghost" onclick="closeM('edit-bk-modal')">বাতিল</button></div>
 </div></div></div>
+<div class="ov" id="edit-user-modal">
+  <div class="modal" style="max-width:460px">
+    <div class="m-hd"><h3 class="m-title">👤 ব্যবহারকারী সম্পাদনা</h3><button class="m-close" onclick="closeM('edit-user-modal')">✕</button></div>
+    <div class="m-body">
+      <input type="hidden" id="eu-uid">
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="fg"><label class="fl">নাম</label><input type="text" id="eu-name" class="fi" placeholder="ব্যবহারকারীর নাম"></div>
+        <div class="fg"><label class="fl">ইমেইল (পরিবর্তন করা যাবে না)</label><input type="text" id="eu-email" class="fi" disabled style="opacity:.5"></div>
+        <div class="fg"><label class="fl">নোট (শুধু অ্যাডমিন দেখবেন)</label><textarea id="eu-note" class="ft" placeholder="এই ব্যবহারকারী সম্পর্কে নোট..." style="min-height:70px"></textarea></div>
+        <div class="fg">
+          <label class="fl">ব্যাজ ওভাররাইড</label>
+          <select id="eu-badge" class="fs">
+            <option value="">স্বয়ংক্রিয় (অর্ডার সংখ্যা অনুযায়ী)</option>
+            <option value="vip">💎 ভিআইপি পাঠক</option>
+            <option value="regular">📘 নিয়মিত পাঠক</option>
+            <option value="new">📗 নতুন পাঠক</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+        <button class="btn btn-gold" onclick="saveUserEdit()">💾 সেভ করুন</button>
+        <button class="btn btn-ghost" onclick="closeM('edit-user-modal')">বাতিল</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="ov" id="img-modal" onclick="this.classList.remove('on')"><img id="img-m" src="" alt="" style="max-width:92vw;max-height:92vh;border-radius:8px"></div>
 <div class="ov" id="confirm-modal"><div class="confirm-box"><span class="confirm-icon" id="cf-icon">❓</span><div class="confirm-title" id="cf-title">নিশ্চিত করুন</div><div class="confirm-msg" id="cf-msg">আপনি কি নিশ্চিত?</div><div class="confirm-btns"><button class="btn btn-err" id="cf-ok">হ্যাঁ</button><button class="btn btn-ghost" onclick="closeM('confirm-modal')">না, বাতিল করুন</button></div></div></div>
 <div id="toast-box"></div>
@@ -982,9 +1012,18 @@ auth.onAuthStateChanged(u=>{
     document.getElementById('p-nm').textContent=n;
     document.getElementById('p-em').textContent=u.email;
     document.getElementById('p-av').textContent=n[0].toUpperCase();
-    // সেভ ইউজার
+    // ব্যান চেক + সেভ ইউজার
     db.ref('users/'+u.uid).once('value').then(s=>{
-      if(!s.exists()) db.ref('users/'+u.uid).set({name:n,email:u.email,joinedAt:Date.now(),orders:0,reviews:0});
+      const ud=s.val();
+      if(ud&&ud.banned){
+        // ব্যান হলে লগআউট করে দাও
+        auth.signOut().then(()=>{
+          toast(`আপনার অ্যাকাউন্ট ব্যান করা হয়েছে। কারণ: ${ud.banReason||''}`, 'err');
+          setTimeout(()=>showPage('auth'),500);
+        });
+        return;
+      }
+      if(!ud) db.ref('users/'+u.uid).set({name:n,email:u.email,joinedAt:Date.now(),orders:0,reviews:0});
     });
     updateUserBadge(u);
   }
@@ -1724,39 +1763,137 @@ function renderUsers(){
   if(q)list=list.filter(([,u])=>(u.name||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q));
   const cnt=document.getElementById('user-cnt');if(cnt)cnt.textContent=list.length+'জন ব্যবহারকারী';
   if(!list.length){el.innerHTML='<div class="empty-st"><span class="ei">👥</span><div class="et">কোনো ব্যবহারকারী নেই</div></div>';return;}
+
   el.innerHTML=list.sort((a,b)=>(b[1].joinedAt||0)-(a[1].joinedAt||0)).map(([uid,u])=>{
+    const isBanned=!!u.banned;
     const isReseller=Object.values(resellers).some(r=>r.email===u.email);
-    const isAdmin2=u.email===ADMIN;
+    const isAdminUser=u.email===ADMIN;
     const ordCnt=u.orders||0;
+
+    // ব্যাজ নির্ধারণ
     let badgeHTML='';
-    if(isAdmin2)badgeHTML='<span class="badge badge-admin">👑 অ্যাডমিন</span>';
-    else if(isReseller)badgeHTML='<span class="badge badge-reseller">🤝 রিসেলার</span>';
-    else if(ordCnt>=10)badgeHTML='<span class="badge badge-vip">💎 ভিআইপি</span>';
-    else if(ordCnt>=3)badgeHTML='<span class="badge badge-regular">📘 নিয়মিত</span>';
+    const override=u.badgeOverride;
+    if(isAdminUser) badgeHTML='<span class="badge badge-admin">👑 অ্যাডমিন</span>';
+    else if(isBanned) badgeHTML='<span class="badge-banned">🚫 ব্যান</span>';
+    else if(isReseller) badgeHTML='<span class="badge badge-reseller">🤝 রিসেলার</span>';
+    else if(override==='vip') badgeHTML='<span class="badge badge-vip">💎 ভিআইপি</span>';
+    else if(override==='regular') badgeHTML='<span class="badge badge-regular">📘 নিয়মিত</span>';
+    else if(override==='new') badgeHTML='<span class="badge badge-new">📗 নতুন</span>';
+    else if(ordCnt>=10) badgeHTML='<span class="badge badge-vip">💎 ভিআইপি</span>';
+    else if(ordCnt>=3) badgeHTML='<span class="badge badge-regular">📘 নিয়মিত</span>';
     else badgeHTML='<span class="badge badge-new">📗 নতুন</span>';
-    return `<div class="user-card">
-      <div class="u-av">${(u.name||u.email||'?')[0].toUpperCase()}</div>
+
+    const avStyle=isBanned?'class="u-av banned"':'class="u-av"';
+
+    return `<div class="user-card ${isBanned?'banned-card':''}">
+      <div ${avStyle}>${(u.name||u.email||'?')[0].toUpperCase()}</div>
       <div class="u-info">
-        <div class="u-name">${u.name||'অজ্ঞাত'} ${badgeHTML}</div>
+        <div class="u-name">
+          ${u.name||'অজ্ঞাত'} ${badgeHTML}
+          ${isBanned?'':''}
+        </div>
         <div class="u-email">${u.email||''}</div>
+        ${u.adminNote?`<div style="font-size:.72rem;color:var(--warn);margin-bottom:4px">📝 ${u.adminNote}</div>`:''}
         <div class="u-stats">
           <span class="u-stat">📦 ${u.orders||0} অর্ডার</span>
           <span class="u-stat">💬 ${u.reviews||0} মন্তব্য</span>
           <span class="u-stat">📅 ${u.joinedAt?new Date(u.joinedAt).toLocaleDateString('bn-BD'):'—'}</span>
+          ${isBanned?`<span class="u-stat" style="color:var(--err)">🚫 ব্যান: ${u.banReason||'কারণ নেই'}</span>`:''}
         </div>
       </div>
       <div class="u-actions">
-        ${!isAdmin2?`<button class="btn btn-ghost btn-sm" onclick="viewUserOrders('${u.email}')">📦 অর্ডার</button>`:''}
+        ${!isAdminUser?`
+          <button class="btn btn-blue btn-sm" onclick="openEditUser('${uid}')">✏️ সম্পাদনা</button>
+          ${isBanned
+            ?`<button class="btn btn-ok btn-sm" onclick="unbanUser('${uid}','${(u.name||'').replace(/'/g,'')}')">✅ আনব্যান</button>`
+            :`<button class="btn btn-err btn-sm" onclick="banUser('${uid}','${(u.name||'').replace(/'/g,'')}')">🚫 ব্যান</button>`
+          }
+          <button class="btn btn-ghost btn-sm" onclick="viewUserOrders('${uid}')">📦 অর্ডার</button>
+          <button class="btn btn-err btn-sm" onclick="deleteUser('${uid}','${(u.name||'').replace(/'/g,'')}')">🗑️</button>
+        `:'<span style="font-size:.76rem;color:var(--t3)">অ্যাডমিন</span>'}
       </div>
     </div>`;
   }).join('');
 }
-function viewUserOrders(email){
-  const list=Object.entries(orders).filter(([,o])=>o.userEmail===email);
-  if(!list.length){toast('এই ব্যবহারকারীর কোনো অর্ডার নেই','info');return;}
-  aOrdFilter='all';
-  aTab('orders',document.querySelector('.a-nav-btn:nth-child(4)'));
-  toast(`${email} এর অর্ডার ফিল্টার করা হয়েছে`,'info');
+
+function openEditUser(uid){
+  const u=users[uid];if(!u)return;
+  document.getElementById('eu-uid').value=uid;
+  document.getElementById('eu-name').value=u.name||'';
+  document.getElementById('eu-email').value=u.email||'';
+  document.getElementById('eu-note').value=u.adminNote||'';
+  document.getElementById('eu-badge').value=u.badgeOverride||'';
+  document.getElementById('edit-user-modal').classList.add('on');
+}
+
+function saveUserEdit(){
+  const uid=document.getElementById('eu-uid').value;
+  const name=document.getElementById('eu-name').value.trim();
+  const note=document.getElementById('eu-note').value.trim();
+  const badge=document.getElementById('eu-badge').value;
+  if(!uid)return;
+  db.ref('users/'+uid).update({name:name||undefined,adminNote:note||null,badgeOverride:badge||null})
+    .then(()=>{toast('ব্যবহারকারী আপডেট ✅','ok');closeM('edit-user-modal');})
+    .catch(e=>toast(e.message,'err'));
+}
+
+function banUser(uid,name){
+  // কারণ জিজ্ঞেস করা
+  const el=document.createElement('div');
+  el.innerHTML=`<div style="position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;padding:20px" id="ban-overlay">
+    <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:16px;max-width:400px;width:100%;padding:26px">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;margin-bottom:8px;color:var(--err)">🚫 ব্যান করুন</h3>
+      <p style="font-size:.86rem;color:var(--t2);margin-bottom:16px">"${name}" কে ব্যান করার কারণ লিখুন:</p>
+      <textarea id="ban-reason-inp" class="ft" placeholder="ব্যানের কারণ..." style="margin-bottom:14px"></textarea>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-err" onclick="doBanUser('${uid}')">🚫 ব্যান করুন</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('ban-overlay').remove()">বাতিল</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(el);
+}
+
+function doBanUser(uid){
+  const reason=document.getElementById('ban-reason-inp')?.value.trim()||'অ্যাডমিন কর্তৃক ব্যান';
+  db.ref('users/'+uid).update({banned:true,banReason:reason,bannedAt:Date.now()})
+    .then(()=>{
+      toast('ব্যবহারকারী ব্যান করা হয়েছে 🚫','info');
+      document.getElementById('ban-overlay')?.remove();
+    }).catch(e=>toast(e.message,'err'));
+}
+
+function unbanUser(uid,name){
+  showConfirm('✅',`"${name}" আনব্যান করবেন?`,'এই ব্যবহারকারী আবার সাইটে প্রবেশ করতে পারবেন।',()=>{
+    db.ref('users/'+uid).update({banned:false,banReason:null,bannedAt:null})
+      .then(()=>toast('আনব্যান সফল ✅','ok')).catch(e=>toast(e.message,'err'));
+  });
+}
+
+function deleteUser(uid,name){
+  showConfirm('🗑️',`"${name}" মুছে ফেলবেন?`,'এই ব্যবহারকারীর সব তথ্য মুছে যাবে। অর্ডার ইতিহাস থেকে যাবে।',()=>{
+    db.ref('users/'+uid).remove()
+      .then(()=>toast('ব্যবহারকারী মুছে ফেলা হয়েছে','info')).catch(e=>toast(e.message,'err'));
+  });
+}
+
+function viewUserOrders(uid){
+  const u=users[uid];if(!u)return;
+  // অর্ডার ফিল্টার করে দেখানো
+  const userOrds=Object.entries(orders).filter(([,o])=>o.userId===uid);
+  if(!userOrds.length){toast(`${u.name||u.email} এর কোনো অর্ডার নেই`,'info');return;}
+
+  // অর্ডার ট্যাবে নিয়ে যাই এবং filter দিই
+  const ordBtn=document.querySelector('.a-nav-btn:nth-child(5)');
+  if(ordBtn)aTab('orders',ordBtn);
+
+  const el=document.getElementById('a-ord-list');
+  if(el){
+    el.innerHTML=`<div style="padding:10px 14px;background:rgba(201,168,76,.08);border:1px solid var(--bd);border-radius:var(--r2);margin-bottom:14px;font-size:.84rem;color:var(--gold)">
+      📦 ${u.name||u.email} এর ${userOrds.length}টি অর্ডার দেখাচ্ছে — <button onclick="renderAOrds()" style="background:none;border:none;color:var(--t2);font-size:.82rem;text-decoration:underline">সব দেখুন</button>
+    </div>`+userOrds.map(([id,o])=>aOrdCard(id,o)).join('');
+  }
+  toast(`${u.name||u.email} এর অর্ডার দেখানো হচ্ছে`,'info');
 }
 
 // ════════════════════════════════════
