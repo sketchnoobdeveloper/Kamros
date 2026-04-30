@@ -499,6 +499,7 @@ footer{margin-top:60px;padding:36px 18px 26px;border-top:1px solid var(--bd);bac
 <div class="mob-nav" id="mob-nav">
   <a href="#" onclick="showPage('home')">🏠 হোম</a>
   <a href="#" onclick="showPage('home')">📚 বই</a>
+  <a href="marketplace.html">✍️ বই বিক্রি করুন</a>
   <a href="#" id="mn-profile" style="display:none" onclick="showPage('profile')">👤 প্রোফাইল</a>
   <a href="#" id="mn-admin" style="display:none;color:var(--warn)" onclick="showPage('admin')">⚙️ অ্যাডমিন</a>
   <a href="#" id="mn-login" onclick="showPage('auth')">🔐 লগইন</a>
@@ -1303,7 +1304,7 @@ function openDetail(id){
             ${free?`<a href="${b.downloadUrl}" target="_blank" class="btn btn-gold btn-lg">📥 ডাউনলোড করুন</a>`:`<button class="btn btn-gold btn-lg" id="buy-btn" onclick="openPay('${id}')">🛒 কিনুন — ৳${fp}</button>`}
             <button class="btn btn-out" onclick="toggleWish('${id}','${b.title}')" id="wb-${id}">${isWished(id)?'❤️ উইশলিস্টে':'🤍 উইশলিস্ট'}</button>
           </div>
-          <div class="det-desc">${b.description||''}</div>
+          <div class="det-desc">${(b.description||'').replace(/https?:\/\/\S+/g,'').trim()}</div>
         </div>
       </div>
 
